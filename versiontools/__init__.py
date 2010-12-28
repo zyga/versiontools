@@ -29,12 +29,21 @@ class Version(tuple):
     """
     Version object suitable to be placed in module's __version__
 
-    Behaves like python's sys.version_info.
+    Version class is a tuple and has the same logical components as
+    :data:`sys.version_info`.
 
-    Has some extra abilities when used for development (when
-    releaselevel is "dev"). It can then integrate with bzrlib and other
-    version control systems to get the revision the branch that contains
-    the file that used each Version() object.
+
+    It has some extra abilities in the way __str__ is implemented and in
+    the way the constructor can find the revision number of a version
+    control system and use it in place of serial number when it is not
+    specified. This second feature is only enabled when the releaselevel
+    is set to the string "dev"
+
+    .. note::
+        Currently to use vcs integration you *must* use the name
+        __version__ in your variable name and you *must* define it at
+        module level.  There is some fuzzy logic that walks the
+        traceback looking for '__version__'.
     """
 
     def __new__(cls, major, minor, micro=0, releaselevel="dev", serial=None):
@@ -60,12 +69,15 @@ class Version(tuple):
         import inspect
         frame = inspect.currentframe()
         outer_frames = inspect.getouterframes(frame)
-        # Go three frames up:
-        #   * one for this function
-        #   * another for _query_vcs()
-        #   * last one for  __init__
-        caller = outer_frames[2][0]
-        return os.path.dirname(os.path.abspath((inspect.getsourcefile(caller))))
+        for index0, record in enumerate(outer_frames):
+            frame, filename, lineno, func_name, context, context_index = record
+            if func_name == "<module>" and "__version__" in context[context_index]:
+                caller = frame
+                break
+        else:
+            caller = None
+        if caller:
+            return os.path.dirname(os.path.abspath((inspect.getsourcefile(caller))))
 
     @classmethod
     def _query_vcs(cls):
@@ -78,6 +90,8 @@ class Version(tuple):
         """
         import pkg_resources
         source_tree = cls._find_source_tree()
+        if source_tree is None:
+            return
         for entrypoint in pkg_resources.iter_entry_points("versiontools.vcs_integration"):
             integration_cls = entrypoint.load()
             integration = integration_cls.from_source_tree(source_tree)
