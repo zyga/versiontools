@@ -8,7 +8,7 @@ Adding support for your project
 
 Put this in your package ``__init__.py``::
 
-    __version__ = "1.2.3"
+    __version__ = "1.2.3" # replace with your project version
     try:
         import versiontools
         __version__ = versiontools.Version(*__version__.split("."))
