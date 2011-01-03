@@ -141,4 +141,4 @@ class Version(tuple):
         return version
 
 
-__version__ = Version(1, 0, 2, "dev")
+__version__ = Version(1, 0, 2, "final")
