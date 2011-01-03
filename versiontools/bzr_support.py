@@ -32,7 +32,14 @@ class BzrIntegration(object):
     Bazaar integration for versiontools
     """
     def __init__(self, branch):
-        self.revno = branch.last_revision_info()[0]
+        self._revno = branch.last_revision_info()[0]
+
+    @property
+    def revno(self):
+        """
+        Revision number of the branch
+        """
+        return self._revno
 
     @classmethod
     def from_source_tree(cls, source_tree):
