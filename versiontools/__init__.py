@@ -32,26 +32,47 @@ class Version(tuple):
     Version class is a tuple and has the same logical components as
     :data:`sys.version_info`.
 
+    There is some extra logic when initializing tuple elements. All
+    variables except for releaselevel are silently converted to integer
+    if possible. That is::
 
-    It has some extra abilities in the way __str__ is implemented and in
-    the way the constructor can find the revision number of a version
-    control system and use it in place of serial number when it is not
-    specified. This second feature is only enabled when the releaselevel
-    is set to the string "dev"
+        >>> Version("1.2.3.dev".split("."))
+        (1, 2, 3, "dev", 0)
 
-    .. note::
-        Currently to use vcs integration you *must* use the name
-        __version__ in your variable name and you *must* define it at
-        module level.  There is some fuzzy logic that walks the
-        traceback looking for '__version__'.
+    Also the following default values are used:
+
+        micro: defaults to zero
+        releaselevel: defaults to "dev"
+        serial: defaults to None which triggers special logic
+
+    There is a constraint on allowed values of releaselevel. Only the
+    following values are permitted:
+
+    * 'dev' (default unless specified differently)
+    * 'alpha'
+    * 'beta'
+    * 'candidate'
+    * 'final'
     """
 
     def __new__(cls, major, minor, micro=0, releaselevel="dev", serial=None):
-        assert releaselevel in ('dev', 'alpha', 'beta', 'candidate', 'final')
+        if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
+            raise ValueError(
+                "releaselevel %r is not permitted" % (releaselevel,))
         if releaselevel == "dev" and serial is None:
             serial = cls._query_vcs()
         if serial is None:
             serial = 0
+        def to_int(v):
+            try:
+                return int(v)
+            except (ValueError, TypeError):
+                return v
+        major = to_int(major)
+        minor = to_int(minor)
+        micro = to_int(micro)
+        serial = to_int(serial)
+
         return tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
 
     major = property(operator.itemgetter(0))
