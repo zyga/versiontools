@@ -19,7 +19,11 @@
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Versiontools help build useful __version__ objects for your projects
+About
+=====
+
+Define *single* and *useful* ``__version__`` of a projects.
+
 """
 
 import os
