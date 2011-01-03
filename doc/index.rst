@@ -23,6 +23,7 @@ Indices and tables
 .. toctree::
     :maxdepth: 2
     
+    installation.rst
     usage.rst
     vcs-integration.rst
     changes.rst
