@@ -118,10 +118,13 @@ class Version(tuple):
         if source_tree is None:
             return
         for entrypoint in pkg_resources.iter_entry_points("versiontools.vcs_integration"):
-            integration_cls = entrypoint.load()
-            integration = integration_cls.from_source_tree(source_tree)
-            if integration:
-                return integration.revno
+            try:
+                integration_cls = entrypoint.load()
+                integration = integration_cls.from_source_tree(source_tree)
+                if integration:
+                    return integration.revno
+            except ImportError:
+                pass
 
     def __str__(self):
         """
@@ -141,4 +144,4 @@ class Version(tuple):
         return version
 
 
-__version__ = Version(1, 0, 2, "final")
+__version__ = Version(1, 0, 3, "final")
