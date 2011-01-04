@@ -5,6 +5,7 @@ Version Tools Documentation
 .. automodule:: versiontools
 
 .. seealso:: To get started quickly see :ref:`usage`
+.. seealso:: See what's new in :ref:`version_1_0_4`
 
 Features
 ========
@@ -27,6 +28,7 @@ Indices and tables
     usage.rst
     vcs-integration.rst
     changes.rst
+    reference.rst
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -33,6 +33,7 @@ class BzrIntegration(object):
     """
     def __init__(self, branch):
         self._revno = branch.last_revision_info()[0]
+        self._branch_nick = branch.nick
 
     @property
     def revno(self):
@@ -41,11 +42,21 @@ class BzrIntegration(object):
         """
         return self._revno
 
+    @property
+    def branch_nick(self):
+        """
+        Nickname of the branch
+
+        .. versionadded:: 1.0.4
+        """
+        return self._branch_nick
+
     @classmethod
     def from_source_tree(cls, source_tree):
         """
-        Initialize BzrIntegration by pointing at the source tree.
-        Any file or directory inside the source tree may be used.
+        Initialize :class:`~versiontools.bzr_support.BzrIntegration` by
+        pointing at the source tree.  Any file or directory inside the
+        source tree may be used.
         """
         branch = None
         try:

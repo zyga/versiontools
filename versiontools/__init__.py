@@ -31,7 +31,7 @@ import operator
 
 class Version(tuple):
     """
-    Version object suitable to be placed in module's __version__
+    Version class suitable to be used in module's __version__
 
     Version class is a tuple and has the same logical components as
     :data:`sys.version_info`.
@@ -64,7 +64,11 @@ class Version(tuple):
             raise ValueError(
                 "releaselevel %r is not permitted" % (releaselevel,))
         if releaselevel == "dev" and serial is None:
-            serial = cls._query_vcs()
+            vcs = cls._query_vcs()
+            if vcs is not None:
+                serial = vcs.revno
+        else:
+            vcs = None
         if serial is None:
             serial = 0
         def to_int(v):
@@ -76,14 +80,28 @@ class Version(tuple):
         minor = to_int(minor)
         micro = to_int(micro)
         serial = to_int(serial)
-
-        return tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
+        obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
+        obj.__dict__ = {'_vcs': vcs}
+        return obj
 
     major = property(operator.itemgetter(0))
     minor = property(operator.itemgetter(1))
     micro = property(operator.itemgetter(2))
     releaselevel = property(operator.itemgetter(3))
     serial = property(operator.itemgetter(4))
+
+    @property
+    def vcs(self):
+        """
+        Return VCS integration object, if any
+
+        .. note::
+            This attribute is **not** an element of the version tuple
+            and thus does not break sorting.
+
+        .. versionadded:: 1.0.4
+        """
+        return self.__dict__['_vcs']
 
     @classmethod
     def _find_source_tree(cls):
@@ -122,7 +140,7 @@ class Version(tuple):
                 integration_cls = entrypoint.load()
                 integration = integration_cls.from_source_tree(source_tree)
                 if integration:
-                    return integration.revno
+                    return integration
             except ImportError:
                 pass
 
@@ -144,4 +162,4 @@ class Version(tuple):
         return version
 
 
-__version__ = Version(1, 0, 3, "final")
+__version__ = Version(1, 0, 4, "final")

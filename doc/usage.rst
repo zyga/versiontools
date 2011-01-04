@@ -53,3 +53,4 @@ use the following strings:
 * ``"beta"``
 * ``"candidate"``
 * ``"final"``
+

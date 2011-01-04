@@ -39,7 +39,6 @@ Supported VCSes
 Bazaar
 ======
 
-Version tools comes bundles with support for bazaar.
+Version tools comes bundles with support for bazaar via the
+:class:`~versiontools.bzr_support.BzrIntegration` class.
 
-.. autoclass:: versiontools.bzr_support.BzrIntegration
-    :members: from_source_tree, revno
