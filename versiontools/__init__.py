@@ -48,9 +48,9 @@ class Version(tuple):
 
     Also the following default values are used:
 
-        micro: defaults to zero
-        releaselevel: defaults to "final"
-        serial: 0
+        :micro: defaults to zero
+        :releaselevel: defaults to "final"
+        :serial: 0
 
     There is a constraint on allowed values of releaselevel. Only the
     following values are permitted:
