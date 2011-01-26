@@ -40,8 +40,8 @@ class Version(tuple):
     :data:`sys.version_info`.
 
     There is some extra logic when initializing tuple elements. All
-    variables except for releaselevel are silently converted to integer
-    if possible. That is::
+    variables except for releaselevel are silently converted to integers
+    That is::
 
         >>> Version("1.2.3.dev".split("."))
         (1, 2, 3, "dev", 0)
@@ -49,8 +49,8 @@ class Version(tuple):
     Also the following default values are used:
 
         micro: defaults to zero
-        releaselevel: defaults to "dev"
-        serial: defaults to None which triggers special logic
+        releaselevel: defaults to "final"
+        serial: 0
 
     There is a constraint on allowed values of releaselevel. Only the
     following values are permitted:
@@ -140,8 +140,8 @@ class Version(tuple):
         """
         Query version control system for the value of serial number.
         The actual version control integration is pluggable, anything
-        that provides an entrypoint for versintools.vcs_integration" is
-        considered. The first version control system that finds the
+        that provides an entrypoint for ``versintools.vcs_integration``
+        is considered. The first version control system that finds the
         revision number wins.
         """
         import pkg_resources
@@ -162,7 +162,7 @@ class Version(tuple):
         Return a string representing the version of this package
 
         The string is not a direct concatenation of all version
-        components.  Instead it's a more natural 'human friendly'
+        components. Instead it's a more natural 'human friendly'
         version where components with certain values are left out.
         """
         version = "%s.%s" % (self.major, self.minor)
