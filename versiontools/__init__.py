@@ -24,10 +24,13 @@ About
 
 Define *single* and *useful* ``__version__`` of a projects.
 
+.. Note: Since version 1.1 we should conform to PEP 386
+
 """
 
 import os
 import operator
+
 
 class Version(tuple):
     """
@@ -59,29 +62,39 @@ class Version(tuple):
     * 'final'
     """
 
-    def __new__(cls, major, minor, micro=0, releaselevel="dev", serial=None):
+    _RELEASELEVEL_TO_TOKEN = {
+        "alpha": "a",
+        "beta": "b",
+        "candidate": "c",
+    }
+
+    @classmethod
+    def from_tuple(cls, version_tuple):
+        """
+        Create version from 5-element tuple
+
+        Note: this is identical to the constructor, just spelled in a
+        way that is more obvious to use.
+
+        .. versionadded:: 1.1
+        """
+        return cls(*version_tuple)
+
+    def __new__(cls, major, minor, micro=0, releaselevel="final", serial=0):
         if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
             raise ValueError(
                 "releaselevel %r is not permitted" % (releaselevel,))
-        if releaselevel == "dev" and serial is None:
-            vcs = cls._query_vcs()
-            if vcs is not None:
-                serial = vcs.revno
-        else:
-            vcs = None
-        if serial is None:
-            serial = 0
         def to_int(v):
-            try:
-                return int(v)
-            except (ValueError, TypeError):
-                return v
+            v = int(v)
+            if v < 0:
+                raise ValueError("Version components cannot be negative")
+            return v
         major = to_int(major)
         minor = to_int(minor)
         micro = to_int(micro)
         serial = to_int(serial)
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
-        obj.__dict__ = {'_vcs': vcs}
+        obj.__dict__ = {'_vcs': cls._query_vcs()}
         return obj
 
     major = property(operator.itemgetter(0))
@@ -101,7 +114,7 @@ class Version(tuple):
 
         .. versionadded:: 1.0.4
         """
-        return self.__dict__['_vcs']
+        return self._vcs
 
     @classmethod
     def _find_source_tree(cls):
@@ -155,11 +168,26 @@ class Version(tuple):
         version = "%s.%s" % (self.major, self.minor)
         if self.micro != 0:
             version += ".%s" % self.micro
-        if self.releaselevel != 'final':
-            version += ".%s" % self.releaselevel
-        if self.releaselevel != 'final' and self.serial:
-            version += '.%s' % self.serial
+        token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
+        if token:
+            version += "%s%d" % (token, self.serial)
+        if self.releaselevel != "final" and self.vcs is not None:
+            version += ".dev%s" % self.vcs.revno
         return version
 
 
-__version__ = Version(1, 0, 4, "final")
+def format_version(version):
+    """
+    Pretty formatting for 5-element version tuple.
+
+    .. versionadded:: 1.1
+    """
+    if isinstance(version, Version):
+        return str(version)
+    elif isinstance(version, tuple) and len(version) == 5:
+        return str(Version.from_tuple(version))
+    else:
+        raise ValueError("version must be a tuple of five items")
+
+
+__version__ = Version(1, 1, 0, "candidate", 1)

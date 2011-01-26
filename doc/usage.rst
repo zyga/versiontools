@@ -11,19 +11,23 @@ Put this in your package ``__init__.py``::
     __version__ = "1.2.3" # replace with your project version
     try:
         import versiontools
-        __version__ = versiontools.Version(*__version__.split("."))
+        __version__ = versiontools.Version.from_tuple(__version__)
     except ImportError:
         pass
 
 
-Add this somewhere inside your ``setup.py`` ``setup()`` call::
+Edit your ``setup.py`` to have code that looks like this::
+
+    import your_package
+    import versiontools
 
     setup(
+        version = versiontools.format_version(your_package.__version__),
         install_requires = [
-            'versiontools >= 1.0.2',
+            'versiontools >= 1.1',
         ],
         setup_requires = [
-            'versiontools >= 1.0.2',
+            'versiontools >= 1.1',
         ],
     )
 

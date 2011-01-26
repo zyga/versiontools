@@ -35,11 +35,12 @@ setup(
     [versiontools.vcs_integration]
     bzr = versiontools.bzr_support:BzrIntegration
     """,
-    classifiers=[
+    classifiers = [
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2.6",
     ],
+    zip_safe = True
 )

@@ -10,6 +10,11 @@ Version class
     :members:
 
 
+Utility functions
+^^^^^^^^^^^^^^^^^
+
+.. :func: versiontools.format_version
+
 Bazaar Integration
 ^^^^^^^^^^^^^^^^^^
 

@@ -5,7 +5,7 @@ Version Tools Documentation
 .. automodule:: versiontools
 
 .. seealso:: To get started quickly see :ref:`usage`
-.. seealso:: See what's new in :ref:`version_1_0_4`
+.. seealso:: See what's new in :ref:`version_1_1`
 
 Features
 ========
@@ -14,7 +14,8 @@ Features
 * Get proper versioning of development snapshots coupled with your :abbr:`VCS
   (Version Control System)` (pluggable support for additional systems
   available)
-* Produce nice version strings for released files
+* Produce nice version strings for released files that are compliant
+  with :pep:`386`
 * Remain comparable as tuple of integers
 
 
