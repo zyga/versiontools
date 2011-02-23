@@ -67,7 +67,7 @@ class BzrIntegration(object):
                 branch = bzrlib.branch.Branch.open_containing(source_tree)[0]
         except bzrlib.errors.NotBranchError:
             import logging
-            logging.warning("Unable to get branch revision because"
+            logging.debug("Unable to get branch revision because"
                             " directory %r is not a bzr branch",
                             source_tree)
         if branch:
