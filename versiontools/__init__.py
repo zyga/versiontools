@@ -190,4 +190,4 @@ def format_version(version):
         raise ValueError("version must be a tuple of five items")
 
 
-__version__ = Version(1, 1, 0, "candidate", 1)
+__version__ = Version(1, 1, 0, "final", 0)
