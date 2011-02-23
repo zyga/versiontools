@@ -40,6 +40,9 @@ Version 1.1
   instead it is used to count alphas, betas and release candidates.
 * All version components except for releaselevel must be non-negative
   integers or strings that can be converted to such integers
+* Do not warn about "directory foo is not a bzr branch". This message
+  was changed to debug as it is now legitimate for released code not to
+  have bzr version control files.
 
 .. _version_1_0_4:
 
