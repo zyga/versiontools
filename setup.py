@@ -24,23 +24,21 @@ import versiontools
 
 
 setup(
-    name = 'versiontools',
-    version = versiontools.format_version(versiontools.__version__),
-    author = "Zygmunt Krynicki",
-    author_email = "zygmunt.krynicki@linaro.org",
-    packages = find_packages(),
-    description = "Smart replacement for plain tuple used in __version__",
+    name='versiontools',
+    version=versiontools.format_version(versiontools.__version__),
+    author="Zygmunt Krynicki",
+    author_email="zygmunt.krynicki@linaro.org",
+    packages=find_packages(),
+    description="Smart replacement for plain tuple used in __version__",
     url='https://launchpad.net/versiontools',
-    entry_points = """
+    entry_points="""
     [versiontools.vcs_integration]
-    bzr = versiontools.bzr_support:BzrIntegration
+    bzr=versiontools.bzr_support:BzrIntegration
     """,
-    classifiers = [
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.6",
-    ],
-    zip_safe = True
-)
+        "Programming Language :: Python :: 2.6"],
+    zip_safe=True)

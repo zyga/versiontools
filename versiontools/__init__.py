@@ -84,6 +84,7 @@ class Version(tuple):
         if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
             raise ValueError(
                 "releaselevel %r is not permitted" % (releaselevel,))
+
         def to_int(v):
             v = int(v)
             if v < 0:
