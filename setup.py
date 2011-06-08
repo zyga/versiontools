@@ -29,6 +29,7 @@ setup(
     author="Zygmunt Krynicki",
     author_email="zygmunt.krynicki@linaro.org",
     packages=find_packages(),
+    test_suite='versiontools.tests',
     description="Smart replacement for plain tuple used in __version__",
     url='https://launchpad.net/versiontools',
     entry_points="""
@@ -36,9 +37,15 @@ setup(
     bzr=versiontools.bzr_support:BzrIntegration
     """,
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.6"],
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.0",
+        "Programming Language :: Python :: 3.1",
+        "Programming Language :: Python :: 3.2",
+        "Topic :: Software Development :: Version Control",
+    ],
     zip_safe=True)

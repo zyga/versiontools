@@ -1,6 +1,27 @@
 Version History
 ***************
 
+.. _version_1_2:
+
+Version 1.2
+===========
+
+* Change how vcs objects are constructed. With this change they are only
+  constructed lazily when needed.  This speeds up common operations, delays the
+  time any additional modules are imported (if any) and retains backwards comp
+  ability.
+
+* Updated documentation on installation instructions to point to the new PPA
+
+* Updated recommended usage guide so that installed programs do not depend on
+  versiontools. This allows you to use versiontools in setup.py and still
+  benefit from the smart version formatting and keep your deployment
+  lightweight.
+
+* Added basic unit tests
+
+* Fixed most PEP8 issues
+
 .. _version_1_1:
 
 Version 1.1

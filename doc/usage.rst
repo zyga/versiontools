@@ -8,26 +8,23 @@ Adding support for your project
 
 Put this in your package ``__init__.py``::
 
-    __version__ = (1, 2, 3, 'final', 0)" # replace with your project version
-    try:
-        import versiontools
-        __version__ = versiontools.Version.from_tuple(__version__)
-    except ImportError:
-        pass
+    __version__ = (1, 2, 3, 'final', 0) # replace with your project version
 
 
 Edit your ``setup.py`` to have code that looks like this::
 
     import your_package
-    import versiontools
+    try:
+        import versiontools
+    except ImportError:
+        print "This package requires python-versiontools to be configured"
+        print "See: http://packages.python.org/versiontools/installation.html"
+        raise
 
     setup(
         version = versiontools.format_version(your_package.__version__),
-        install_requires = [
-            'versiontools >= 1.1',
-        ],
         setup_requires = [
-            'versiontools >= 1.1',
+            'versiontools >= 1.2',
         ],
     )
 

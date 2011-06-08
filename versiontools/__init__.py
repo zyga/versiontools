@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#
-# Copyright (C) 2010 Linaro Limited
+# Copyright (C) 2010, 2011 Linaro Limited
 #
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
@@ -22,11 +20,15 @@
 About
 =====
 
-Define *single* and *useful* ``__version__`` of a projects.
+Define *single* and *useful* ``__version__`` of a project.
 
 .. Note: Since version 1.1 we should conform to PEP 386
 
 """
+
+
+__version__ = (1, 2, 0, "final", 0)
+
 
 import os
 import operator
@@ -95,7 +97,8 @@ class Version(tuple):
         micro = to_int(micro)
         serial = to_int(serial)
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
-        obj.__dict__ = {'_vcs': cls._query_vcs()}
+        object.__setattr__(obj, '_source_tree', cls._find_source_tree())
+        object.__setattr__(obj, '_vcs', None)
         return obj
 
     major = property(operator.itemgetter(0))
@@ -115,6 +118,8 @@ class Version(tuple):
 
         .. versionadded:: 1.0.4
         """
+        if self._vcs is None:
+            self._vcs = self._query_vcs()
         return self._vcs
 
     @classmethod
@@ -128,6 +133,8 @@ class Version(tuple):
         outer_frames = inspect.getouterframes(frame)
         for index0, record in enumerate(outer_frames):
             frame, filename, lineno, func_name, context, context_index = record
+            if context is None:
+                continue
             if func_name == "<module>" and "__version__" in context[context_index]:
                 caller = frame
                 break
@@ -136,23 +143,25 @@ class Version(tuple):
         if caller:
             return os.path.dirname(os.path.abspath((inspect.getsourcefile(caller))))
 
-    @classmethod
-    def _query_vcs(cls):
+    def _query_vcs(self):
         """
-        Query version control system for the value of serial number.
-        The actual version control integration is pluggable, anything
-        that provides an entrypoint for ``versintools.vcs_integration``
-        is considered. The first version control system that finds the
-        revision number wins.
+        Attempt to build a VCS object for the directory refrenced in
+        self._source_tree.
+
+        The actual version control integration is pluggable, anything that
+        provides an entrypoint for ``versintools.vcs_integration`` is
+        considered. The first version control system that indicates support for
+        the directory wins.
+
+        In practice you'd want to use the vcs property.
         """
         import pkg_resources
-        source_tree = cls._find_source_tree()
-        if source_tree is None:
+        if self._source_tree is None:
             return
         for entrypoint in pkg_resources.iter_entry_points("versiontools.vcs_integration"):
             try:
                 integration_cls = entrypoint.load()
-                integration = integration_cls.from_source_tree(source_tree)
+                integration = integration_cls.from_source_tree(self._source_tree)
                 if integration:
                     return integration
             except ImportError:
@@ -189,6 +198,3 @@ def format_version(version):
         return str(Version.from_tuple(version))
     else:
         raise ValueError("version must be a tuple of five items")
-
-
-__version__ = (1, 1, 0, "final", 0)

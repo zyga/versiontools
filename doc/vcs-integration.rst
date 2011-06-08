@@ -6,14 +6,7 @@ About
 
 Version tools supports a form of version control system integration.
 This code is *only* triggered for development versions of your project
-(indicated by setting ``releaselevel`` to ``"dev"``) that have a default
-value (``None``) for ``serial`` (last component of the version tuple).
-
-When both conditions are true :abbr:`VCS (Version Control System)` integration
-plug-in attempts to obtain the revision number of the source tree and use it
-instead of the serial number. This way the tree revision is incremented on
-every commit. This is useful for embedding the true version inside generated
-content such as release tarballs or documentation.
+(indicated by setting ``releaselevel`` to something other than ``"final"``)
 
 .. note::
     Currently to use :abbr:`VCS (Version Control System)` integration you

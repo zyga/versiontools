@@ -22,17 +22,13 @@ There are several installation options available:
 Using Ubuntu PPAs
 -----------------
 
-For Ubuntu 10.04 onward there is a stable and unstable PPA (personal package
-archives):
+For Ubuntu 10.04 onward there is a stable PPA (personal package archive):
 
-* ppa:linaro-infrastructure/launch-control
-* ppa:linaro-infrastructure/launch-control-snapshots
+* ppa:linaro-validation/ppa
 
-The stable PPA has normal releases, the unstable PPA has daily development
-snapshots and is not recommended unless you need a bleeding edge feature. To
-add a ppa to an Ubuntu system use the add-apt-repository command::
+To add a ppa to an Ubuntu system use the add-apt-repository command::
 
-    sudo add-apt-repository ppa:linaro-infrastructure/launch-control
+    sudo add-apt-repository ppa:linaro-validation/ppa
 
 After you add the PPA you need to update your package cache::
 
