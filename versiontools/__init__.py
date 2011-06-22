@@ -133,7 +133,7 @@ class Version(tuple):
         outer_frames = inspect.getouterframes(frame)
         for index0, record in enumerate(outer_frames):
             frame, filename, lineno, func_name, context, context_index = record
-            if context is None:
+            if context is None or context_index >= len(context):
                 continue
             if func_name == "<module>" and "__version__" in context[context_index]:
                 caller = frame
