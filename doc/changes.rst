@@ -1,6 +1,20 @@
 Version History
 ***************
 
+.. _version_1_3:
+
+Version 1.3
+===========
+
+* Add integration with setuptools (or more accurately, distribute) so that you
+  no longer have to try-import versiontools. This means that you may finally
+  install your packages with pip and everything will work correctly.
+
+* Prevent an unexplained crash when following the backtrace in
+  ``Version._find_source_tree()``.
+
+.. seealso:: To get started quickly see :ref:`using_versiontools`
+
 .. _version_1_2:
 
 Version 1.2

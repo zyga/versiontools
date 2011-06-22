@@ -3,36 +3,56 @@
 Usage
 *****
 
+.. _using_versiontools:
+
 Adding support for your project
 ===============================
 
-Put this in your package ``__init__.py``::
+Using versiontools is very easy. Just follow those two steps to do it.
+
+Declare package version
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Put this code your package's ``__init__.py`` or in your main module::
 
     __version__ = (1, 2, 3, 'final', 0) # replace with your project version
 
+.. note:
+    There is some rationale for each component of the tuple. This has been
+    standardized in :pep:`386`. Make sure you understand what each field
+    represents.
+
+Patch setup.py
+^^^^^^^^^^^^^^
 
 Edit your ``setup.py`` to have code that looks like this::
 
-    import your_package
-    try:
-        import versiontools
-    except ImportError:
-        print "This package requires python-versiontools to be configured"
-        print "See: http://packages.python.org/versiontools/installation.html"
-        raise
-
     setup(
-        version = versiontools.format_version(your_package.__version__),
+        # Replace your_package as appropriate
+        version = ":versiontools:your_package.__version__",
+        # ...
         setup_requires = [
-            'versiontools >= 1.2',
+            'versiontools >= 1.3',
         ],
     )
 
+The trick here is to use a magic value for version keyword. The format of that
+magic value is::
+
+    ":versiontools:" - a magic string that versiontools matches
+    your_package     - name of your package or module to import
+    ":"              - colon separating package from identifier
+    identifier       - (typically __version__) object to import
+                       from your package.
+
+This will make versiontools use `versiontoools.format_version()` on whatever
+`your_package.__version__` contains. Since your __version__ is a tuple as
+described above you'll get a correctly formatted version identifier.
 
 This code will ensure that:
 
-1. Your package will use version tools
-2. Your package will correctly install (via pip)
+#. Your package will use version tools
+#. Your package will correctly install via pip (for real this time)
 
 
 Developing with versiontools
