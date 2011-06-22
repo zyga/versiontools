@@ -20,8 +20,6 @@
 
 from setuptools import setup, find_packages
 
-import versiontools
-
 
 setup(
     name='versiontools',
