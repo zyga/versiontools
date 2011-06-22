@@ -198,3 +198,43 @@ def format_version(version):
         return str(Version.from_tuple(version))
     else:
         raise ValueError("version must be a tuple of five items")
+
+
+def handle_version(dist, attr, value):
+    """
+    Handle version keyword as used by setuptools.
+
+    Note: This function is normally called by setuptools, it is advertised in
+    the entry points of versiontools as setuptools extension.
+
+    .. versionadded:: 1.3
+    """
+    from distutils.errors import DistutilsSetupError
+    # We need to look at dist.metadata.version to actually see the version
+    # that was passed to setup. Something in between does not seem to like our
+    # version string and we get 0 here, odd.
+    if value == 0:
+        value = dist.metadata.version
+    if not (isinstance(value, basestring)
+            and value.startswith(":versiontools:")):
+        return
+    # Peel away the magic tag
+    value = value[len(":versiontools:"):]
+    # Check if the syntax of the version is okay
+    if ":" not in value:
+        raise DistutilsSetupError(
+            "version must be of the form `module_or_package:identifier`")
+    # Import the module or package indicated by the version tag
+    module_or_package, identifier = value.split(":", 1)
+    try:
+        obj = __import__(module_or_package, fromlist=[''])
+    except ImportError as ex:
+        raise DistutilsSetupError(
+            "Unable to import %r: %s" % (module_or_package, ex))
+    # Look up the version identifier.
+    try:
+        version = getattr(obj, identifier)
+    except AttributeError as ex:
+        raise DistutilsSetupError("Unable to access %r in %r: %s" % (identifier, module_or_package, ex))
+    # Yay we have it! Let's format it correctly and overwrite the old value
+    dist.metadata.version = format_version(version)
