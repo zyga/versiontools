@@ -35,6 +35,8 @@ setup(
     entry_points="""
     [versiontools.vcs_integration]
     bzr=versiontools.bzr_support:BzrIntegration
+    [distutils.setup_keywords]
+    version=versiontools:handle_version
     """,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
