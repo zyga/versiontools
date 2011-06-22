@@ -25,7 +25,7 @@ import versiontools
 
 setup(
     name='versiontools',
-    version=versiontools.format_version(versiontools.__version__),
+    version=":versiontools:versiontools:__version__",
     author="Zygmunt Krynicki",
     author_email="zygmunt.krynicki@linaro.org",
     packages=find_packages(),
