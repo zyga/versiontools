@@ -1,6 +1,14 @@
 Version History
 ***************
 
+.. _version_1_3.1:
+
+Version 1.3.1
+=============
+
+* To make `setup.py test` work in third party components we cannot use
+  versiontools in our own setup.
+
 .. _version_1_3:
 
 Version 1.3
