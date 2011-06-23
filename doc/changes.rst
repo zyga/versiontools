@@ -1,7 +1,35 @@
 Version History
 ***************
 
-.. _version_1_3.1:
+.. _version_1_3_2:
+
+Version 1.3.2
+=============
+
+* Change version string produced by :meth:`versiontools.Version.__str__` and
+  `versiontools.format_version` to be more useful when vcs integration is not
+  available and the release is not final. Consult the table below for details.
+
+  +----------------------+----------------------+--------------------------------+
+  | Prior to 1.3.2       | 1.3.2                | Comment                        |
+  +======================+======================+================================+
+  | ``1.2.3``            | ``1.2.3.dev``        | When releaselevel==dev but     |
+  |                      |                      | VCS integration is not         |
+  | When VCS integration |                      | available we now add a .dev    |
+  | is not available     |                      | suffix to differentiate from   |
+  |                      |                      | released versions              |
+  +----------------------+----------------------+--------------------------------+
+  | ``1.2.3a5`` or       | ``1.2.3a5``          | ``.devREVNO`` is only added    |
+  | ``1.2.3a5.devREVNO`` | `                    | when releaselevel==dev.        |
+  +----------------------+----------------------+                                |
+  | ``1.2.3b5`` or       | ``1.2.3b5``          | It will never appear on alphas |
+  | ``1.2.3b5.devREVNO`` |                      | , betas or release candidates. |
+  +----------------------+----------------------+                                |
+  | ``1.2.3c5`` or       | ``1.2.3c5``          |                                |
+  | ``1.2.3c5.devREVNO`` |                      |                                |
+  +----------------------+----------------------+--------------------------------+
+
+.. _version_1_3_1:
 
 Version 1.3.1
 =============

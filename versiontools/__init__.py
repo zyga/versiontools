@@ -27,7 +27,7 @@ Define *single* and *useful* ``__version__`` of a project.
 """
 
 
-__version__ = (1, 3, 1, "final", 0)
+__version__ = (1, 3, 2, "final", 0)
 
 
 import os
@@ -181,8 +181,11 @@ class Version(tuple):
         token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
         if token:
             version += "%s%d" % (token, self.serial)
-        if self.releaselevel != "final" and self.vcs is not None:
-            version += ".dev%s" % self.vcs.revno
+        if self.releaselevel == "dev":
+            if self.vcs is not None:
+                version += ".dev%s" % self.vcs.revno
+            else:
+                version += ".dev"
         return version
 
 

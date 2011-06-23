@@ -59,7 +59,7 @@ class VersionFormattingTests(TestCase):
         self.assertEqual(str(Version(1, 0, 1)), "1.0.1")
 
     def test_formatting_serial_not_used_for_development(self):
-        self.assertEqual(str(Version(1, 2, 3, "dev", 4)), "1.2.3")
+        self.assertEqual(str(Version(1, 2, 3, "dev", 4)), "1.2.3.dev")
 
     def test_formatting_serial_not_used_for_final(self):
         self.assertEqual(str(Version(1, 2, 3, "final", 4)), "1.2.3")
@@ -92,9 +92,15 @@ class VersionFormattingTestsWithMockedVCS(TestCase):
 
     def test_formatting_without_vcs(self):
         version = Version(1, 2, 3, "dev", 4)
-        self.assertEqual(str(version), "1.2.3")
+        self.assertEqual(str(version), "1.2.3.dev")
 
     def test_formatting_with_vcs_and_revno(self):
         self.mock_vcs_revno(5)
         version = Version(1, 2, 3, "dev", 4)
         self.assertEqual(str(version), "1.2.3.dev5")
+
+    def test_formatting_no_dev_suffix_for_alpha_beta_and_candidate(self):
+        self.mock_vcs_revno(5)
+        self.assertEqual(str(Version(1, 2, 3, "alpha", 4)), "1.2.3a4")
+        self.assertEqual(str(Version(1, 2, 3, "beta", 4)), "1.2.3b4")
+        self.assertEqual(str(Version(1, 2, 3, "candidate", 4)), "1.2.3c4")
