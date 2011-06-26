@@ -205,7 +205,7 @@ class Version(tuple):
         return version
 
 
-def format_version(version):
+def format_version(version, hint=None):
     """
     Pretty formatting for 5-element version tuple.
 
@@ -213,6 +213,8 @@ def format_version(version):
     """
     if isinstance(version, Version):
         return str(version)
+    elif isinstance(version, tuple) and len(version) == 5 and hint is not None:
+        return str(Version.from_tuple_and_hint(version, hint))
     elif isinstance(version, tuple) and len(version) == 5:
         return str(Version.from_tuple(version))
     else:
