@@ -227,8 +227,12 @@ def handle_version(dist, attr, value):
     if ":" not in value:
         raise DistutilsSetupError(
             "version must be of the form `module_or_package:identifier`")
-    # Import the module or package indicated by the version tag
+    # Parse the version string
     module_or_package, identifier = value.split(":", 1)
+    # Use __version__ unless specified otherwise
+    if identifier == "":
+        identifier = "__version__"
+    # Import the module or package indicated by the version tag
     try:
         obj = __import__(module_or_package, fromlist=[''])
     except ImportError as ex:

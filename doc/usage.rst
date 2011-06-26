@@ -29,10 +29,10 @@ Edit your ``setup.py`` to have code that looks like this::
 
     setup(
         # Replace your_package as appropriate
-        version = ":versiontools:your_package.__version__",
+        version = ":versiontools:your_package:",
         # ...
         setup_requires = [
-            'versiontools >= 1.3',
+            'versiontools >= 1.4',
         ],
     )
 
@@ -42,8 +42,8 @@ magic value is::
     ":versiontools:" - a magic string that versiontools matches
     your_package     - name of your package or module to import
     ":"              - colon separating package from identifier
-    identifier       - (typically __version__) object to import
-                       from your package.
+    identifier       - Object to import from your_package.
+                       Can be omitted if equal to __version__.
 
 This will make versiontools use `versiontoools.format_version()` on whatever
 `your_package.__version__` contains. Since your __version__ is a tuple as
