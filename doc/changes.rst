@@ -1,6 +1,18 @@
 Version History
 ***************
 
+.. _version_1_4:
+
+Version 1.4
+===========
+
+* Work harder to figure out the source tree a __version__ object comes from.
+  This is possible with a new function
+  :meth:`versiontools.Version.from_tuple_and_hint`.
+
+* Allow people to omit the version identifier in setup.py (defaulting to
+  ``__version__``) 
+
 .. _version_1_3_2:
 
 Version 1.3.2
