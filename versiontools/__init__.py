@@ -30,8 +30,9 @@ Define *single* and *useful* ``__version__`` of a project.
 __version__ = (1, 3, 2, "final", 0)
 
 
-import os
+import inspect
 import operator
+import os
 
 
 class Version(tuple):
@@ -82,6 +83,22 @@ class Version(tuple):
         """
         return cls(*version_tuple)
 
+    @classmethod
+    def from_tuple_and_hint(cls, version_tuple, hint):
+        """
+        Similar to :meth:`versiontools.Version.from_tuple` but uses the hint
+        object to locate the source tree if needed. A good candidate for hint
+        object is the module that contains the version_tuple.
+
+        .. versionadded:: 1.4
+        """
+        self = cls.from_tuple(version_tuple)
+        if self._source_tree is None:
+            path = inspect.getsourcefile(hint)
+            if path is not None:
+                self._source_tree = os.path.dirname(os.path.abspath(path))
+        return self
+
     def __new__(cls, major, minor, micro=0, releaselevel="final", serial=0):
         if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
             raise ValueError(
@@ -128,7 +145,6 @@ class Version(tuple):
         Find the absolute pathname of the tree that contained the file
         that called our __init__()
         """
-        import inspect
         frame = inspect.currentframe()
         outer_frames = inspect.getouterframes(frame)
         for index0, record in enumerate(outer_frames):
