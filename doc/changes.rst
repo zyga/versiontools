@@ -1,6 +1,15 @@
 Version History
 ***************
 
+.. _version_1_5:
+
+Version 1.5
+===========
+
+* Added Git support, contributed by Jannis Leidel (thanks!). To use it you need
+  GitPython >= 0.3.2.RC1. It does not currently work on GitPython packaged in
+  Ubuntu Natty (0.1.6). 
+
 .. _version_1_4:
 
 Version 1.4

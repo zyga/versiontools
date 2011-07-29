@@ -65,3 +65,28 @@ You can pass ``--user`` if you prefer to do a local (non system-wide) installati
     To install from source you will need distutils (replacement of setuptools)
     They are typically installed on any Linux system with python but on Windows
     you may need to install that separately.
+
+
+Version control-specific dependencies
+-------------------------------------
+
+To use VCS integration you will need additional libraries. They are documented
+below. Note: users of your packages will *not* need those libraries. They are
+most useful for the developer during project life-cycle, especially between
+releases, to identify tarballs easily.
+
+Bazaar Requirements
++++++++++++++++++++
+
+To work with Bazaar repositories you will need bzrlib. You can install it with
+pip or from the ubuntu package. Note that on windows bzrlib is usually bundled
+with a standalone python interpreter and is *not* available if you install
+python manually.
+
+
+Git Requirements
+++++++++++++++++
+
+To work with Git repositories you will need GitPython. A version supplied with
+Ubuntu Natty is not recent enough so I would suggest using a more recent
+version directly form the python package index.
