@@ -36,6 +36,7 @@ setup(
     entry_points="""
     [versiontools.vcs_integration]
     bzr=versiontools.bzr_support:BzrIntegration
+    git=versiontools.git_support:GitIntegration
     [distutils.setup_keywords]
     version=versiontools:handle_version
     """,

@@ -35,3 +35,11 @@ Bazaar
 Version tools comes bundles with support for bazaar via the
 :class:`~versiontools.bzr_support.BzrIntegration` class.
 
+Git
+===
+
+Version tools comes bundles with support for git via the
+:class:`~versiontools.git_support.GitIntegration` class.
+
+This backend needs the `GitPython <http://pypi.python.org/pypi/GitPython>`_
+library to access the Git repository data.
