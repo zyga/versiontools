@@ -33,7 +33,7 @@ __version__ = (1, 5, 0, "final", 0)
 import inspect
 import operator
 import os
-
+import sys
 
 class Version(tuple):
     """
@@ -221,6 +221,12 @@ def format_version(version, hint=None):
         raise ValueError("version must be a tuple of five items")
 
 
+if sys.version_info[:1] < (3,):
+    isstring = lambda string: isinstance(string, basestring)
+else:
+    isstring = lambda string: isinstance(string, str)
+
+
 def handle_version(dist, attr, value):
     """
     Handle version keyword as used by setuptools.
@@ -236,7 +242,7 @@ def handle_version(dist, attr, value):
     # version string and we get 0 here, odd.
     if value == 0:
         value = dist.metadata.version
-    if not (isinstance(value, basestring)
+    if not (isstring(value)
             and value.startswith(":versiontools:")):
         return
     # Peel away the magic tag
@@ -253,13 +259,22 @@ def handle_version(dist, attr, value):
     # Import the module or package indicated by the version tag
     try:
         obj = __import__(module_or_package, fromlist=[''])
-    except ImportError as ex:
+    except ImportError:
+        message = get_exception_message(sys.exc_info())
         raise DistutilsSetupError(
-            "Unable to import %r: %s" % (module_or_package, ex))
+            "Unable to import %r%s" % (module_or_package, message))
     # Look up the version identifier.
     try:
         version = getattr(obj, identifier)
-    except AttributeError as ex:
-        raise DistutilsSetupError("Unable to access %r in %r: %s" % (identifier, module_or_package, ex))
+    except AttributeError:
+        message = get_exception_message(sys.exc_info())
+        raise DistutilsSetupError(
+            "Unable to access %r in %r%s" %
+            (identifier, module_or_package, message))
     # Yay we have it! Let's format it correctly and overwrite the old value
     dist.metadata.version = format_version(version, obj)
+
+def get_exception_message(exception, value, traceback):
+    if value is not None:  # the exception value
+        return ": %s" % value
+    return ""
