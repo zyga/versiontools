@@ -6,7 +6,7 @@ Version History
 Version 1.6
 ===========
 
-* Add support for python2.4 and python2.5 thanks to Janis Leidel (thanks!).
+* Add support for python2.4 and python2.5 thanks to Jannis Leidel (thanks!).
 
 * Add tox (http://codespeak.net/~hpk/tox/) configuration file for easier
   testing.
