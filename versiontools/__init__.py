@@ -269,7 +269,7 @@ def handle_version(dist, attr, value):
     except AttributeError:
         message = get_exception_message(sys.exc_info())
         raise DistutilsSetupError(
-            "Unable to access %r in %r: %s" %
+            "Unable to access %r in %r%s" %
             (identifier, module_or_package, message))
     # Yay we have it! Let's format it correctly and overwrite the old value
     dist.metadata.version = format_version(version, obj)
