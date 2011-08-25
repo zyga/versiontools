@@ -13,7 +13,7 @@ Features
 * Keep a *single version definition* inside your package or module
 * Get proper versioning of development snapshots coupled with your :abbr:`VCS
   (Version Control System)` (pluggable support for additional systems
-  available). Git and Bazaar are supported out of the box.
+  available). Git, Mercurial and Bazaar are supported out of the box.
 * Produce nice version strings for released files that are compliant
   with :pep:`386`
 * Remain comparable as tuple of integers

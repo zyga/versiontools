@@ -83,10 +83,15 @@ pip or from the ubuntu package. Note that on windows bzrlib is usually bundled
 with a standalone python interpreter and is *not* available if you install
 python manually.
 
-
 Git Requirements
 ++++++++++++++++
 
 To work with Git repositories you will need GitPython. A version supplied with
 Ubuntu Natty is not recent enough so I would suggest using a more recent
 version directly form the python package index.
+
+Mercurial Requirements
+++++++++++++++++++++++
+
+To work with Mercurial repositories you will need Mercurial. You can install
+it with pip or from the ubuntu package.

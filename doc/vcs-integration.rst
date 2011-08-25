@@ -43,3 +43,12 @@ Version tools comes bundles with support for git via the
 
 This backend needs the `GitPython <http://pypi.python.org/pypi/GitPython>`_
 library to access the Git repository data.
+
+Mercurial
+=========
+
+Version tools comes bundles with support for Mercurial via the
+:class:`~versiontools.hg_support.HgIntegration` class.
+
+This backend needs the `Mercurial <http://mercurial.selenic.com/>`_
+library to access the Mercurial repository data.
