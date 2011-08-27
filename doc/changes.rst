@@ -1,6 +1,16 @@
 Version History
 ***************
 
+
+.. _version_1_7:
+
+Version 1.7
+===========
+
+* Add support for Mercurial repositories
+
+* Fix a bug in exception handling that affected 1.6
+
 .. _version_1_6:
 
 Version 1.6

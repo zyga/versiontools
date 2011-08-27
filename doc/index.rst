@@ -5,7 +5,7 @@ Version Tools Documentation
 .. automodule:: versiontools
 
 .. seealso:: To get started quickly see :ref:`usage`
-.. seealso:: See what's new in :ref:`version_1_6`
+.. seealso:: See what's new in :ref:`version_1_7`
 
 Features
 ========
