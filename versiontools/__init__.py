@@ -258,7 +258,7 @@ def handle_version(dist, attr, value):
         identifier = "__version__"
     # Import the module or package indicated by the version tag
     try:
-        obj = __import__(module_or_package, fromlist=[''])
+        obj = __import__(module_or_package, globals(), locals(), [])
     except ImportError:
         message = get_exception_message(*sys.exc_info())
         raise DistutilsSetupError(
