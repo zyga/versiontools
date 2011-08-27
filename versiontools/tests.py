@@ -15,11 +15,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
+import sys
 
+from distutils.dist import Distribution
+from distutils.errors import DistutilsSetupError
 
 from unittest import TestCase
 
-from versiontools import Version
+from versiontools import Version, handle_version
 
 
 class VersionFormattingTests(TestCase):
@@ -104,3 +107,30 @@ class VersionFormattingTestsWithMockedVCS(TestCase):
         self.assertEqual(str(Version(1, 2, 3, "alpha", 4)), "1.2.3a4")
         self.assertEqual(str(Version(1, 2, 3, "beta", 4)), "1.2.3b4")
         self.assertEqual(str(Version(1, 2, 3, "candidate", 4)), "1.2.3c4")
+
+
+class HandleVersionTests(TestCase):
+
+    def setUp(self):
+        self.dist = Distribution()
+
+    def test_cant_import(self):
+        version = ':versiontools:nonexisting:'
+        try:
+            handle_version(self.dist, None, version)
+        except Exception:
+            e = sys.exc_info()[1]
+            self.assertTrue(isinstance(e, DistutilsSetupError))
+            self.assertEqual(str(e), "Unable to import 'nonexisting': "
+                                      "No module named nonexisting")
+
+    def test_not_found(self):
+        version = ':versiontools:versiontools:__nonexisting__'
+        try:
+            handle_version(self.dist, None, version)
+        except Exception:
+            e = sys.exc_info()[1]
+            self.assertTrue(isinstance(e, DistutilsSetupError))
+            self.assertEqual(str(e), "Unable to access '__nonexisting__' in "
+                                      "'versiontools': 'module' object has "
+                                      "no attribute '__nonexisting__'")
