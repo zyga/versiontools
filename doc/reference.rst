@@ -26,3 +26,9 @@ Git Integration
 
 .. autoclass:: versiontools.git_support.GitIntegration
     :members: from_source_tree, revno, branch_nick
+
+Hg Integration
+^^^^^^^^^^^^^^
+
+.. autoclass:: versiontools.hg_support.HgIntegration
+    :members: from_source_tree, revno, branch_nick
