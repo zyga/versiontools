@@ -260,14 +260,14 @@ def handle_version(dist, attr, value):
     try:
         obj = __import__(module_or_package, fromlist=[''])
     except ImportError:
-        message = get_exception_message(sys.exc_info())
+        message = get_exception_message(*sys.exc_info())
         raise DistutilsSetupError(
             "Unable to import %r%s" % (module_or_package, message))
     # Look up the version identifier.
     try:
         version = getattr(obj, identifier)
     except AttributeError:
-        message = get_exception_message(sys.exc_info())
+        message = get_exception_message(*sys.exc_info())
         raise DistutilsSetupError(
             "Unable to access %r in %r%s" %
             (identifier, module_or_package, message))
