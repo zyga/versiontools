@@ -1,6 +1,14 @@
 Version History
 ***************
 
+Unreleased
+==========
+
+ * Fix all pep8 issues
+
+ * Added test that demostrated that exception handling works on all Python versions.
+ 
+ * Fixed an issue with using __import__ on Python 2.4.
 
 .. _version_1_7:
 
