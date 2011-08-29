@@ -35,6 +35,7 @@ import operator
 import os
 import sys
 
+
 class Version(tuple):
     """
     Version class suitable to be used in module's __version__
@@ -151,13 +152,16 @@ class Version(tuple):
             frame, filename, lineno, func_name, context, context_index = record
             if context is None or context_index >= len(context):
                 continue
-            if func_name == "<module>" and "__version__" in context[context_index]:
+            if (func_name == "<module>" and "__version__" in
+                context[context_index]):
                 caller = frame
                 break
         else:
             caller = None
         if caller:
-            return os.path.dirname(os.path.abspath((inspect.getsourcefile(caller))))
+            return os.path.dirname(
+                os.path.abspath(
+                    inspect.getsourcefile(caller)))
 
     def _query_vcs(self):
         """
@@ -174,10 +178,12 @@ class Version(tuple):
         import pkg_resources
         if self._source_tree is None:
             return
-        for entrypoint in pkg_resources.iter_entry_points("versiontools.vcs_integration"):
+        for entrypoint in pkg_resources.iter_entry_points(
+            "versiontools.vcs_integration"):
             try:
                 integration_cls = entrypoint.load()
-                integration = integration_cls.from_source_tree(self._source_tree)
+                integration = integration_cls.from_source_tree(
+                    self._source_tree)
                 if integration:
                     return integration
             except ImportError:
@@ -273,6 +279,7 @@ def handle_version(dist, attr, value):
             (identifier, module_or_package, message))
     # Yay we have it! Let's format it correctly and overwrite the old value
     dist.metadata.version = format_version(version, obj)
+
 
 def get_exception_message(exception, value, traceback):
     if value is not None:  # the exception value

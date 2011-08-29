@@ -44,7 +44,8 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        ("License :: OSI Approved :: GNU Library or Lesser General Public"
+         " License (LGPL)"),
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2.4",
         "Programming Language :: Python :: 2.5",

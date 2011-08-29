@@ -62,7 +62,8 @@ class BzrIntegration(object):
         try:
             if bzrlib.__version__ >= (2, 2, 1):
                 with bzrlib.initialize():
-                    branch = bzrlib.branch.Branch.open_containing(source_tree)[0]
+                    branch = bzrlib.branch.Branch.open_containing(
+                        source_tree)[0]
             else:
                 branch = bzrlib.branch.Branch.open_containing(source_tree)[0]
         except bzrlib.errors.NotBranchError:
