@@ -23,6 +23,7 @@
 git support for versiontools
 """
 import logging
+import sys
 
 
 class GitIntegration(object):
@@ -63,9 +64,11 @@ class GitIntegration(object):
         try:
             from git import Repo
             repo = Repo(source_tree)
-        except Exception, e:
+        except Exception:
+            from versiontools import get_exception_message
+            message = get_exception_message(*sys.exc_info())
             logging.debug("Unable to get branch revision because "
                           "directory %r is not a git repo. Error: %s",
-                          (source_tree, e))
+                          (source_tree, message))
         if repo:
             return cls(repo)

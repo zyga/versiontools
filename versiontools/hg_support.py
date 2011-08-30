@@ -23,6 +23,7 @@
 hg support for versiontools
 """
 import logging
+import sys
 
 
 class HgIntegration(object):
@@ -65,9 +66,11 @@ class HgIntegration(object):
             from mercurial.hg import repository
             from mercurial.ui import ui
             repo = repository(ui(), source_tree)
-        except Exception, e:
+        except Exception:
+            from versiontools import get_exception_message
+            message = get_exception_message(*sys.exc_info())
             logging.debug("Unable to get branch revision because "
                           "directory %r is not a hg repo. Error: %s",
-                          (source_tree, e))
+                          (source_tree, message))
         if repo:
             return cls(repo)

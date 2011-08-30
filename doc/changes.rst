@@ -15,6 +15,8 @@ Unreleased
  * Add a constraint on serial to be greater than zero on alpha, beta and
    release candidates as required by :pep:`386`.
 
+ * Fix support for python 3.x
+
 .. _version_1_7:
 
 Version 1.7
