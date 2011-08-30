@@ -12,6 +12,9 @@ Unreleased
 
  * Fixed a few documentation typos and extended code reference section.
 
+ * Add a constraint on serial to be greater than zero on alpha, beta and
+   release candidates as required by :pep:`386`.
+
 .. _version_1_7:
 
 Version 1.7

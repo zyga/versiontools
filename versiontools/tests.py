@@ -38,6 +38,18 @@ class VersionFormattingTests(TestCase):
     def test_defaults(self):
         self.assertEqual(Version(1, 0), (1, 0, 0, "final", 0))
 
+    def test_serial_cannot_be_zero_for_certain_releaselevel(self):
+        self.assertRaises(ValueError, Version, 1, 2, 3, "alpha", 0)
+        self.assertRaises(ValueError, Version, 1, 2, 3, "beta", 0)
+        self.assertRaises(ValueError, Version, 1, 2, 3, "candidate", 0)
+
+    def test_serial_can_be_zero_for_certain_releaselevel(self):
+        self.assertEqual(Version(1, 2, 3, "final", 0).serial, 0)
+        self.assertEqual(Version(1, 2, 3, "dev", 0).serial, 0)
+
+    def test_releaselevel_values(self):
+        self.assertRaises(ValueError, Version, 1, 2, 3, "foobar", 0)
+
     def test_accessors(self):
         version = Version(1, 2, 3, "dev", 4)
         self.assertEqual(version.major, 1)
