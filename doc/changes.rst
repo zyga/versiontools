@@ -10,6 +10,8 @@ Unreleased
  
  * Fixed an issue with using __import__ on Python 2.4.
 
+ * Fixed a few documentation typos and extended code reference section.
+
 .. _version_1_7:
 
 Version 1.7

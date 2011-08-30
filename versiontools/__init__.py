@@ -42,28 +42,6 @@ class Version(tuple):
 
     Version class is a tuple and has the same logical components as
     :data:`sys.version_info`.
-
-    There is some extra logic when initializing tuple elements. All
-    variables except for releaselevel are silently converted to integers
-    That is::
-
-        >>> Version("1.2.3.dev".split("."))
-        (1, 2, 3, "dev", 0)
-
-    Also the following default values are used:
-
-        :micro: defaults to zero
-        :releaselevel: defaults to "final"
-        :serial: 0
-
-    There is a constraint on allowed values of releaselevel. Only the
-    following values are permitted:
-
-    * 'dev' (default unless specified differently)
-    * 'alpha'
-    * 'beta'
-    * 'candidate'
-    * 'final'
     """
 
     _RELEASELEVEL_TO_TOKEN = {
@@ -72,63 +50,110 @@ class Version(tuple):
         "candidate": "c",
     }
 
-    @classmethod
-    def from_tuple(cls, version_tuple):
-        """
-        Create version from 5-element tuple
-
-        Note: this is identical to the constructor, just spelled in a
-        way that is more obvious to use.
-
-        .. versionadded:: 1.1
-        """
-        return cls(*version_tuple)
-
-    @classmethod
-    def from_tuple_and_hint(cls, version_tuple, hint):
-        """
-        Similar to :meth:`versiontools.Version.from_tuple` but uses the hint
-        object to locate the source tree if needed. A good candidate for hint
-        object is the module that contains the version_tuple.
-
-        .. versionadded:: 1.4
-        """
-        self = cls.from_tuple(version_tuple)
-        if self._source_tree is None:
-            path = inspect.getsourcefile(hint)
-            if path is not None:
-                self._source_tree = os.path.dirname(os.path.abspath(path))
-        return self
-
     def __new__(cls, major, minor, micro=0, releaselevel="final", serial=0):
-        if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
-            raise ValueError(
-                "releaselevel %r is not permitted" % (releaselevel,))
+        """
+        Construct a new version tuple.
 
+        There is some extra logic when initializing tuple elements. All
+        variables except for releaselevel are silently converted to integers
+        That is::
+
+            >>> Version("1.2.3.dev".split("."))
+            (1, 2, 3, "dev", 0)
+
+        :param major:
+            Major version number
+
+        :type major:
+            :class:`int` or :class:`str`
+
+        :param minor:
+            Minor version number
+
+        :type minor:
+            :class:`int` or :class:`str`
+
+        :param micro:
+            Micro version number, defaults to ``0``.
+
+        :type micro:
+            :class:`int` or :class:`str`
+
+        :param releaselevel:
+            Release level name.
+            
+            There is a constraint on allowed values of releaselevel. Only the
+            following values are permitted:
+
+            * 'dev'
+            * 'alpha'
+            * 'beta'
+            * 'candidate'
+            * 'final'
+
+        :type releaselevel:
+            :class:`str`
+
+        :param serial:
+            Serial number, usually zero, only used for alpha, beta and
+            candidate versions where it must be greater than zero.
+
+        :type micro:
+            :class:`int` or :class:`str`
+
+        :raises ValueError:
+            If releaselevel is incorrect, a version component is negative or
+            serial is 0 and releaselevel is alpha, beta or candidate.
+        """
         def to_int(v):
             v = int(v)
             if v < 0:
                 raise ValueError("Version components cannot be negative")
             return v
+        
         major = to_int(major)
         minor = to_int(minor)
         micro = to_int(micro)
         serial = to_int(serial)
+        if releaselevel not in ('dev', 'alpha', 'beta', 'candidate', 'final'):
+            raise ValueError(
+                "releaselevel %r is not permitted" % (releaselevel,))
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
         object.__setattr__(obj, '_source_tree', cls._find_source_tree())
         object.__setattr__(obj, '_vcs', None)
         return obj
 
-    major = property(operator.itemgetter(0))
-    minor = property(operator.itemgetter(1))
-    micro = property(operator.itemgetter(2))
-    releaselevel = property(operator.itemgetter(3))
-    serial = property(operator.itemgetter(4))
+    major = property(
+        operator.itemgetter(0),
+        doc="Major version number")
+
+    minor = property(
+        operator.itemgetter(1),
+        doc="Minor version number")
+
+    micro = property(
+        operator.itemgetter(2),
+        doc="Micro version number")
+
+    releaselevel = property(
+        operator.itemgetter(3),
+        doc="Release level string")
+
+    serial = property(
+        operator.itemgetter(4),
+        doc="Serial number")
 
     @property
     def vcs(self):
         """
-        Return VCS integration object, if any
+        Return VCS integration object, if any.
+
+        Accessing this attribute for the first time will query VCS lookup (may
+        be slower, will trigger imports of various VCS plugins).
+
+        The returned object, if not None, should have at least `revno`
+        property. For details see your particular version control integration
+        plugin.
 
         .. note::
             This attribute is **not** an element of the version tuple
@@ -141,10 +166,110 @@ class Version(tuple):
         return self._vcs
 
     @classmethod
+    def from_tuple(cls, version_tuple):
+        """
+        Create version from 5-element tuple
+
+        .. note::
+            This method is identical to the constructor, just spelled in a way
+            that is more obvious to use.
+
+        .. versionadded:: 1.1
+        """
+        return cls(*version_tuple)
+
+    @classmethod
+    def from_tuple_and_hint(cls, version_tuple, hint):
+        """
+        Create version from a 5-element tuple and VCS location hint.
+
+        Similar to :meth:`~versiontools.Version.from_tuple` but uses the hint
+        object to locate the source tree if needed. A good candidate for hint
+        object is the module that contains the version_tuple. In general
+        anything that works with :meth:`inspect.getsourcefile()` is good.
+
+        .. versionadded:: 1.4
+        """
+        self = cls.from_tuple(version_tuple)
+        if self._source_tree is None:
+            path = inspect.getsourcefile(hint)
+            if path is not None:
+                self._source_tree = os.path.dirname(os.path.abspath(path))
+        return self
+
+    def __str__(self):
+        """
+        Return a string representation of the version tuple.
+
+        The string is not a direct concatenation of all version components.
+        Instead it's a more natural 'human friendly' version where components
+        with certain values are left out.
+
+        The following table shows how a version tuple gets converted to a
+        version string.
+
+        +--------------------------------+-------------------------------------------------------+
+        | __version__                    | :meth:`~versiontools.format_version()`                |
+        +================================+=======================================================+
+        | ``(1, 2, 0, "final", 0)``      | ``"1.2"``                                             |
+        +--------------------------------+-------------------------------------------------------+
+        | ``(1, 2, 3, "final", 0)``      | ``"1.2.3"``                                           |
+        +--------------------------------+-------------------------------------------------------+
+        | ``(1, 3, 0, "alpha", 1)``      | ``"1.3a1"``                                           |
+        +--------------------------------+-------------------------------------------------------+
+        | ``(1, 3, 0, "beta", 1)``       | ``"1.3b1"``                                           |
+        +--------------------------------+-------------------------------------------------------+
+        | ``(1, 3, 0, "candidate", 1)``  | ``"1.3c1"``                                           |
+        +--------------------------------+-------------------------------------------------------+
+        | ``(1, 3, 0, "dev", 0)``        | ``"1.3.dev"``                                         |
+        +--------------------------------+-------------------------------------------------------+
+
+        Now when release level is set to ``"dev"`` then interesting things
+        start to happen.  When possible, version control system is queried for
+        revision or changeset identifier. This information gets used to create
+        a more useful version string. The suffix gets appended to the base
+        version string. So for example a full version string, when using Bazaar
+        might look like this: ``"1.3.dev54"`` which indicates that the tree was
+        at revision 54 at that time.
+
+        The following table describes what gets appended by each version
+        control system.
+
+        +------------------------+---------------------------------------------------+
+        | Version control system | Formatted version suffix                          |
+        +========================+===================================================+
+        | Bazaar                 | Revision number (revno),  e.g. ``54``             |
+        +------------------------+---------------------------------------------------+
+        | Git                    | Head commit ID (sha1), e.g.                       |
+        |                        | ``"e40105c58a162de822b63d28b63f768a9763fbe3"``    |
+        +------------------------+---------------------------------------------------+
+        | Mercurial              | Tip revision number, e.g. ``54``                  |
+        +------------------------+---------------------------------------------------+
+
+        .. note::
+            This logic is implemented in :meth:`versiontools.Version.__str__()`
+            and can be overridden by sub-classes. You can use project-specific
+            logic if required. To do that replace __version__ with an instance
+            of your sub-class. 
+        """
+        version = "%s.%s" % (self.major, self.minor)
+        if self.micro != 0:
+            version += ".%s" % self.micro
+        token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
+        if token:
+            version += "%s%d" % (token, self.serial)
+        if self.releaselevel == "dev":
+            if self.vcs is not None:
+                version += ".dev%s" % self.vcs.revno
+            else:
+                version += ".dev"
+        return version
+
+    @classmethod
     def _find_source_tree(cls):
         """
-        Find the absolute pathname of the tree that contained the file
-        that called our __init__()
+        Find the absolute pathname of the tree that contained the file that
+        called our __init__()
         """
         frame = inspect.currentframe()
         outer_frames = inspect.getouterframes(frame)
@@ -189,31 +314,31 @@ class Version(tuple):
             except ImportError:
                 pass
 
-    def __str__(self):
-        """
-        Return a string representing the version of this package
-
-        The string is not a direct concatenation of all version
-        components. Instead it's a more natural 'human friendly'
-        version where components with certain values are left out.
-        """
-        version = "%s.%s" % (self.major, self.minor)
-        if self.micro != 0:
-            version += ".%s" % self.micro
-        token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
-        if token:
-            version += "%s%d" % (token, self.serial)
-        if self.releaselevel == "dev":
-            if self.vcs is not None:
-                version += ".dev%s" % self.vcs.revno
-            else:
-                version += ".dev"
-        return version
-
 
 def format_version(version, hint=None):
     """
     Pretty formatting for 5-element version tuple.
+
+    :param version:
+        The version to format
+
+    :type version:
+        A :class:`tuple` with five elements, as the one provided to
+        :meth:`versiontools.Version.from_tuple`, or an existing instance of
+        :class:`versiontools.Version`.
+
+    :param hint:
+        The hint object, if provided, helps versiontools to locate the
+        directory which might host the project's source code. The idea is to
+        pass `module.__version__` as the first argument and `module` as the
+        hint. This way we can loookup where module came from, and look for
+        version control system data in that directory. Technicallally passing
+        hint will make us call
+        :meth:`~versiontools.Version.from_tuple_and_hint()` instead of
+        :meth:`~versiontools.Version.from_tuple()`.
+
+    :type hint:
+        either :obj:`None`, or a module.
 
     .. versionadded:: 1.1
     """
@@ -237,8 +362,10 @@ def handle_version(dist, attr, value):
     """
     Handle version keyword as used by setuptools.
 
-    Note: This function is normally called by setuptools, it is advertised in
-    the entry points of versiontools as setuptools extension.
+    .. note::
+        This function is normally called by setuptools, it is advertised in the
+        entry points of versiontools as setuptools extension. There is no need
+        to call in manually.
 
     .. versionadded:: 1.3
     """

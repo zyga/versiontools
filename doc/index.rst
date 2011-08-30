@@ -22,6 +22,16 @@ Features
   with :pep:`386`
 * Remain comparable as tuple of integers
 
+How version tuple affects version string
+========================================
+
+This is pulled from the documentation of the string method on the
+:class:`~versiontools.Version` class. In general you don't need to explicitly
+use that class to benefit from this system. To learn more check the
+:ref:`usage` section.
+
+.. automethod:: versiontools.Version.__str__
+    :noindex:
 
 Indices and tables
 ==================

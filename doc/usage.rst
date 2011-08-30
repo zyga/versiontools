@@ -15,12 +15,14 @@ Declare package version
 
 Put this code your package's ``__init__.py`` or in your main module::
 
-    __version__ = (1, 2, 3, 'final', 0) # replace with your project version
+    __version__ = (1, 2, 3, 'final', 0)  # replace with your project version
 
 .. note:
     There is some rationale for each component of the tuple. This has been
     standardized in :pep:`386`. Make sure you understand what each field
-    represents.
+    represents. There are a few constraints, such as having serial (the last
+    component) greater than zero if the release is 'alpha', 'beta' or
+    'candidate'.
 
 Patch setup.py
 ^^^^^^^^^^^^^^
@@ -45,9 +47,9 @@ magic value is::
     identifier       - Object to import from your_package.
                        Can be omitted if equal to __version__.
 
-This will make versiontools use `versiontoools.format_version()` on whatever
-`your_package.__version__` contains. Since your __version__ is a tuple as
-described above you'll get a correctly formatted version identifier.
+This will make versiontools use :meth:`versiontools.format_version()` on
+whatever `your_package.__version__` contains. Since your `__version__` is a
+tuple as described above you'll get a correctly formatted version identifier.
 
 This code will ensure that:
 
