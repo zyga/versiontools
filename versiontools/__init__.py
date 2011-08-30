@@ -81,7 +81,7 @@ class Version(tuple):
 
         :param releaselevel:
             Release level name.
-            
+
             There is a constraint on allowed values of releaselevel. Only the
             following values are permitted:
 
@@ -110,7 +110,7 @@ class Version(tuple):
             if v < 0:
                 raise ValueError("Version components cannot be negative")
             return v
-        
+
         major = to_int(major)
         minor = to_int(minor)
         micro = to_int(micro)
@@ -120,7 +120,8 @@ class Version(tuple):
                 "releaselevel %r is not permitted" % (releaselevel,))
         if releaselevel in ('alpha', 'beta', 'candidate') and serial == 0:
             raise ValueError(
-                "serial must be greater than zero for %s releases" % releaselevel)
+                ("serial must be greater than zero for"
+                 "%s releases") % releaselevel)
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
         object.__setattr__(obj, '_source_tree', cls._find_source_tree())
         object.__setattr__(obj, '_vcs', None)
@@ -211,21 +212,21 @@ class Version(tuple):
         The following table shows how a version tuple gets converted to a
         version string.
 
-        +--------------------------------+-------------------------------------------------------+
-        | __version__                    | :meth:`~versiontools.format_version()`                |
-        +================================+=======================================================+
-        | ``(1, 2, 0, "final", 0)``      | ``"1.2"``                                             |
-        +--------------------------------+-------------------------------------------------------+
-        | ``(1, 2, 3, "final", 0)``      | ``"1.2.3"``                                           |
-        +--------------------------------+-------------------------------------------------------+
-        | ``(1, 3, 0, "alpha", 1)``      | ``"1.3a1"``                                           |
-        +--------------------------------+-------------------------------------------------------+
-        | ``(1, 3, 0, "beta", 1)``       | ``"1.3b1"``                                           |
-        +--------------------------------+-------------------------------------------------------+
-        | ``(1, 3, 0, "candidate", 1)``  | ``"1.3c1"``                                           |
-        +--------------------------------+-------------------------------------------------------+
-        | ``(1, 3, 0, "dev", 0)``        | ``"1.3.dev"``                                         |
-        +--------------------------------+-------------------------------------------------------+
+        +-------------------------------+-------------------+
+        | __version__                   | Formatter version |
+        +===============================+===================+
+        | ``(1, 2, 0, "final", 0)``     | ``"1.2"``         |
+        +-------------------------------+-------------------+
+        | ``(1, 2, 3, "final", 0)``     | ``"1.2.3"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "alpha", 1)``     | ``"1.3a1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "beta", 1)``      | ``"1.3b1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "candidate", 1)`` | ``"1.3c1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "dev", 0)``       | ``"1.3.dev"``     |
+        +-------------------------------+-------------------+
 
         Now when release level is set to ``"dev"`` then interesting things
         start to happen.  When possible, version control system is queried for
@@ -238,22 +239,22 @@ class Version(tuple):
         The following table describes what gets appended by each version
         control system.
 
-        +------------------------+---------------------------------------------------+
-        | Version control system | Formatted version suffix                          |
-        +========================+===================================================+
-        | Bazaar                 | Revision number (revno),  e.g. ``54``             |
-        +------------------------+---------------------------------------------------+
-        | Git                    | Head commit ID (sha1), e.g.                       |
-        |                        | ``"e40105c58a162de822b63d28b63f768a9763fbe3"``    |
-        +------------------------+---------------------------------------------------+
-        | Mercurial              | Tip revision number, e.g. ``54``                  |
-        +------------------------+---------------------------------------------------+
+        +-----------+------------------------------------------------+
+        | VCS       | Formatted version suffix                       |
+        +===========+================================================+
+        | Bazaar    | Revision number (revno),  e.g. ``54``          |
+        +-----------+------------------------------------------------+
+        | Git       | Head commit ID (sha1), e.g.                    |
+        |           | ``"e40105c58a162de822b63d28b63f768a9763fbe3"`` |
+        +-----------+------------------------------------------------+
+        | Mercurial | Tip revision number, e.g. ``54``               |
+        +-----------+------------------------------------------------+
 
         .. note::
             This logic is implemented in :meth:`versiontools.Version.__str__()`
             and can be overridden by sub-classes. You can use project-specific
             logic if required. To do that replace __version__ with an instance
-            of your sub-class. 
+            of your sub-class.
         """
         version = "%s.%s" % (self.major, self.minor)
         if self.micro != 0:
