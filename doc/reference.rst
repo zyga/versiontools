@@ -24,8 +24,8 @@ this function:
 .. autofunction:: versiontools.format_version
 
 
-Setuptools integration
-^^^^^^^^^^^^^^^^^^^^^^
+Integration with setuptools 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Setuptools has a framework where external packages, such as versiontools, can
 hook into setup.py metadata and commands. We use this feature to intercept
@@ -35,30 +35,31 @@ handled by the following method:
 .. autofunction:: versiontools.handle_version
 
 
-Version Control Plugins
-^^^^^^^^^^^^^^^^^^^^^^^
+Integration with version control systems
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following version control integration plugins are bundled with
 versiontools. Additional plugins may be provided by third party modules but
 they are not documented here.
 
 
-Bazaar Integration
-++++++++++++++++++
+Bazaar
+++++++
 
 .. autoclass:: versiontools.bzr_support.BzrIntegration
     :members: from_source_tree, revno, branch_nick
 
 
-Git Integration
-+++++++++++++++
+Git
++++
 
 .. autoclass:: versiontools.git_support.GitIntegration
     :members: from_source_tree, revno, branch_nick
 
 
-Hg Integration
+Hg (Mercurial)
 ++++++++++++++
 
 .. autoclass:: versiontools.hg_support.HgIntegration
     :members: from_source_tree, revno, branch_nick
+

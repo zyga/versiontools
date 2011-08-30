@@ -4,18 +4,21 @@ Version History
 Unreleased
 ==========
 
- * Fix all pep8 issues
+ * Fixed all pep8 issues (prettier syntax)
 
- * Added test that demostrated that exception handling works on all Python versions.
- 
  * Fixed an issue with using __import__ on Python 2.4.
 
- * Fixed a few documentation typos and extended code reference section.
+ * Fixed an issue with using exceptions on Python 3.x
 
- * Add a constraint on serial to be greater than zero on alpha, beta and
-   release candidates as required by :pep:`386`.
+ * Added test that demostrated that exception handling works on all Python versions.
 
- * Fix support for python 3.x
+ * Unified error handling across version control plugins.
+
+ * General documentation improvements, installation, usage, code refrerence,
+   and writing additional plug-ins.
+
+ * Added a *backwards incompatible* constraint on serial to be greater than
+   zero on alpha, beta and release candidates as required by :pep:`386`.
 
 .. _version_1_7:
 
