@@ -121,7 +121,7 @@ class Version(tuple):
         if releaselevel in ('alpha', 'beta', 'candidate') and serial == 0:
             raise ValueError(
                 ("serial must be greater than zero for"
-                 "%s releases") % releaselevel)
+                 " %s releases") % releaselevel)
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
         object.__setattr__(obj, '_source_tree', cls._find_source_tree())
         object.__setattr__(obj, '_vcs', None)
