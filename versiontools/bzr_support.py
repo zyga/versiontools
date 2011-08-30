@@ -21,10 +21,8 @@
 """
 Bazaar support for versiontools
 """
-
-import bzrlib
-import bzrlib.errors
-import bzrlib.branch
+import logging
+import sys
 
 
 class BzrIntegration(object):
@@ -60,16 +58,20 @@ class BzrIntegration(object):
         """
         branch = None
         try:
+            import bzrlib
             if bzrlib.__version__ >= (2, 2, 1):
                 with bzrlib.initialize():
+                    import bzrlib.branch
                     branch = bzrlib.branch.Branch.open_containing(
                         source_tree)[0]
             else:
+                import bzrlib.branch
                 branch = bzrlib.branch.Branch.open_containing(source_tree)[0]
-        except bzrlib.errors.NotBranchError:
-            import logging
-            logging.debug("Unable to get branch revision because"
-                            " directory %r is not a bzr branch",
-                            source_tree)
+        except Exception:
+            from versiontools import get_exception_message
+            message = get_exception_message(*sys.exc_info())
+            logging.debug("Unable to get branch revision because "
+                          "directory %r is not a bzr branch. Erorr: %s",
+                          (source_tree, message))
         if branch:
             return cls(branch)
