@@ -60,13 +60,18 @@ class BzrIntegration(object):
         try:
             import bzrlib
             if bzrlib.__version__ >= (2, 2, 1):
-                with bzrlib.initialize():
-                    import bzrlib.branch
-                    branch = bzrlib.branch.Branch.open_containing(
-                        source_tree)[0]
+                # Python 2.4 the with keyword is not supported
+                # and so you need to use the context manager manually, sigh.
+                library_state = bzrlib.initialize()
+                library_state.__enter__()
+                try:
+                    from bzrlib import branch
+                    branch = branch.Branch.open_containing(source_tree)[0]
+                finally:
+                    library_state.__exit__(None, None, None)
             else:
-                import bzrlib.branch
-                branch = bzrlib.branch.Branch.open_containing(source_tree)[0]
+                from bzrlib import branch
+                branch = branch.Branch.open_containing(source_tree)[0]
         except Exception:
             from versiontools import get_exception_message
             message = get_exception_message(*sys.exc_info())
