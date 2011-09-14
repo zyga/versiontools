@@ -1,12 +1,16 @@
 Version History
 ***************
 
-Unreleased
-==========
+.. _version_1_8:
+
+Version 1.8
+===========
 
  * Fixed all pep8 issues (prettier syntax)
 
  * Fixed an issue with using __import__ on Python 2.4.
+
+ * Fixed an issue with using :versiontools:path.to.symbol with nested modules
 
  * Fixed an issue with using exceptions on Python 3.x
 

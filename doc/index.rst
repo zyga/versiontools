@@ -5,7 +5,7 @@ Version Tools Documentation
 .. automodule:: versiontools
 
 .. seealso:: To get started quickly see :ref:`usage`
-.. seealso:: See what's new in :ref:`version_1_7`
+.. seealso:: See what's new in :ref:`version_1_8`
 
 .. note::
     This document may be out of date, the bleeding edge version is always
