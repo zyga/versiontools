@@ -34,7 +34,7 @@ Edit your ``setup.py`` to have code that looks like this::
         version = ":versiontools:your_package:",
         # ...
         setup_requires = [
-            'versiontools >= 1.4',
+            'versiontools >= 1.8',
         ],
     )
 
