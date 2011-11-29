@@ -31,7 +31,7 @@ class BzrIntegration(object):
     """
     def __init__(self, branch):
         self._revno = branch.last_revision_info()[0]
-        self._branch_nick = branch.nick
+        self._branch_nick = branch._get_nick(local=True)
 
     @property
     def revno(self):

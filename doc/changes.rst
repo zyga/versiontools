@@ -1,6 +1,15 @@
 Version History
 ***************
 
+.. _version_1_8_1:
+
+Version 1.8.1
+=============
+
+ * Improve performance when working with checkouts. The use of branch.nick has
+   been replaced with branch._get_nick(local=True). This avoids network
+   operations and is much more responsive.
+
 .. _version_1_8:
 
 Version 1.8
