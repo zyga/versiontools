@@ -1,6 +1,16 @@
 Version History
 ***************
 
+.. _version_1_8_2:
+
+Version 1.8.2
+=============
+
+ * Improve git support by adding code paths compatible with python-git 0.1.6 (which
+   is easier to get on Debian)
+ * Change git support to default to short commit id. If you want to access the
+   long commit id you need to access it directly as GitIntegration.commit_id
+
 .. _version_1_8_1:
 
 Version 1.8.1

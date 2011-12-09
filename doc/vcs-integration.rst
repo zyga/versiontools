@@ -74,9 +74,8 @@ Git
 +++
 
 To work with Git repositories you will need `GitPython
-<http://pypi.python.org/pypi/GitPython>`_. A version supplied with Ubuntu Natty
-is not recent enough so I would suggest using a more recent version directly
-form the python package index.
+<http://pypi.python.org/pypi/GitPython>`_. Version 0.1.6 is sufficient to run
+the code. 
 
 Mercurial
 +++++++++
