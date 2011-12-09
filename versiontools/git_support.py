@@ -33,27 +33,42 @@ class GitIntegration(object):
     def __init__(self, repo):
         head = None
         try:
+            # This path is for 0.3RC from pypi
             head = repo.head
+            self._branch_nick = head.name
+            self._commit_id = head.commit.hexsha
         except AttributeError:
             pass
         try:
             # This is for python-git 0.1.6 (that is in debian and ubuntu)
             head = [head for head in repo.heads if head.name==repo.active_branch][0]
+            self._branch_nick = head.name
+            self._commit_id = head.commit.id
         except IndexError, KeyError:
             pass
         if head is None:
             raise ValueError("Unable to lookup head in %r" % repo)
-        # Get the branch name and commit IDs
-        self._branch_nick = repo.active_branch
-        self._commit_id = head.commit.id
-        self._commit_id_abbrev = head.commit.id_abbrev
 
     @property
     def revno(self):
         """
         Revision number of the branch
         """
-        return self._commit_id_abbrev
+        return self.commit_id_abbrev
+
+    @property
+    def commit_id(self):
+        """
+        The full commit id
+        """
+        return self._commit_id
+
+    @property
+    def commit_id_abbrev(self):
+        """
+        The abbreviated, 7 character commit id
+        """
+        return self._commit_id[:7]
 
     @property
     def branch_nick(self):
