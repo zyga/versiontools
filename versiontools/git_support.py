@@ -31,18 +31,29 @@ class GitIntegration(object):
     Git integration for versiontools
     """
     def __init__(self, repo):
-        self._revno = str(repo.head.commit)
+        head = None
         try:
-            self._branch_nick = str(repo.head.reference.name)
-        except Exception:
-            self._branch_nick = None
+            head = repo.head
+        except AttributeError:
+            pass
+        try:
+            # This is for python-git 0.1.6 (that is in debian and ubuntu)
+            head = [head for head in repo.heads if head.name==repo.active_branch][0]
+        except IndexError, KeyError:
+            pass
+        if head is None:
+            raise ValueError("Unable to lookup head in %r" % repo)
+        # Get the branch name and commit IDs
+        self._branch_nick = repo.active_branch
+        self._commit_id = head.commit.id
+        self._commit_id_abbrev = head.commit.id_abbrev
 
     @property
     def revno(self):
         """
         Revision number of the branch
         """
-        return self._revno
+        return self._commit_id_abbrev
 
     @property
     def branch_nick(self):
