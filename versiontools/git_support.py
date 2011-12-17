@@ -44,7 +44,7 @@ class GitIntegration(object):
             head = [head for head in repo.heads if head.name==repo.active_branch][0]
             self._branch_nick = head.name
             self._commit_id = head.commit.id
-        except IndexError, KeyError:
+        except (IndexError, KeyError):
             pass
         if head is None:
             raise ValueError("Unable to lookup head in %r" % repo)
