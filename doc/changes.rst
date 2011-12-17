@@ -1,6 +1,12 @@
 Version History
 ***************
 
+Unreleased
+==========
+
+* Fix incorrectly specified line in git support. Previosuly a KeyError
+  may bleed to the outside calling code, depending on python version. 
+
 .. _version_1_8_2:
 
 Version 1.8.2
