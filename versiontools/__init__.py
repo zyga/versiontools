@@ -27,7 +27,7 @@ Define *single* and *useful* ``__version__`` of a project.
 """
 
 
-__version__ = (1, 8, 2, "final", 0)
+__version__ = (1, 8, 3, "final", 0)
 
 
 import inspect

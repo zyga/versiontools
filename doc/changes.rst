@@ -1,8 +1,10 @@
 Version History
 ***************
 
-Unreleased
-==========
+.. _version_1_8_3:
+
+Version 1.8.3
+=============
 
 * Fix incorrectly specified line in git support. Previosuly a KeyError
   may bleed to the outside calling code, depending on python version. 
