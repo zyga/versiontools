@@ -65,13 +65,13 @@ class BzrIntegration(object):
                 library_state = bzrlib.initialize()
                 library_state.__enter__()
                 try:
-                    from bzrlib import branch
-                    branch = branch.Branch.open_containing(source_tree)[0]
+                    from bzrlib.branch import Branch
+                    branch = Branch.open_containing(source_tree)[0]
                 finally:
                     library_state.__exit__(None, None, None)
             else:
-                from bzrlib import branch
-                branch = branch.Branch.open_containing(source_tree)[0]
+                from bzrlib.branch import Branch
+                branch = Branch.open_containing(source_tree)[0]
         except Exception:
             from versiontools import get_exception_message
             message = get_exception_message(*sys.exc_info())
