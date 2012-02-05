@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#
-# Copyright (C) 2010 Linaro Limited
+# Copyright (C) 2010 -2012 Linaro Limited
 #
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
@@ -19,7 +17,24 @@
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
 """
+.. _bzr:
+
+versiontools.bzr_support
+========================
+
 Bazaar support for versiontools
+
+.. note::
+
+    To work with Bazaar repositories you will need bzrlib.  You can install it
+    with pip or from the ``bzr`` package on Ubuntu.
+
+.. warning:: 
+
+    On Windows the typical Bazaar installation bundles both the python
+    interpreter and a host of libraries and those libraries are not accessible
+    by the typically-installed python interpreter. If you wish to use Bazaar on
+    windows we would recommend to install Bazaar directly from pypi.
 """
 import logging
 import sys
@@ -73,8 +88,8 @@ class BzrIntegration(object):
                 from bzrlib.branch import Branch
                 branch = Branch.open_containing(source_tree)[0]
         except Exception:
-            from versiontools import get_exception_message
-            message = get_exception_message(*sys.exc_info())
+            from versiontools import _get_exception_message
+            message = _get_exception_message(*sys.exc_info())
             logging.debug("Unable to get branch revision because "
                           "directory %r is not a bzr branch. Erorr: %s",
                           (source_tree, message))

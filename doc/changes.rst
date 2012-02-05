@@ -1,5 +1,22 @@
-Version History
+Release history
 ***************
+
+.. _unreleased_version:
+
+Unreleased version
+==================
+
+* Reorganize and update documentation.
+* Add a new way of using versiontools that does not require using
+  ``setup_requires``. This way is based on bundling a small helper module to
+  help you bootstrap your project when installed from source.
+* Add :meth:`versiontools.Version.from_expression()` that creates a Version
+  object from a python import expression (and an optional variable identifer)
+* Move and rename private function ``versiontools.handle_version`` to
+  :func:`versiontools.setuptools_hooks:version`.
+* Move and rename private function ``versiontools.get_exception_message`` to
+  :func:`versiontools._get_exception_message`.
+* Remove private function ``versiontools.isstring``.
 
 .. _version_1_8_3:
 
@@ -142,7 +159,7 @@ Version 1.3
 * Prevent an unexplained crash when following the backtrace in
   ``Version._find_source_tree()``.
 
-.. seealso:: To get started quickly see :ref:`using_versiontools`
+.. seealso:: To get started quickly see :ref:`usage`
 
 .. _version_1_2:
 

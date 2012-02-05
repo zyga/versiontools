@@ -1,4 +1,4 @@
-# Copyright (C) 2010, 2011 Linaro Limited
+# Copyright (C) 2010-2012 Linaro Limited
 #
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
@@ -17,17 +17,15 @@
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-About
-=====
+versiontools
+============
 
 Define *single* and *useful* ``__version__`` of a project.
 
-.. Note: Since version 1.1 we should conform to PEP 386
-
+.. note: Since version 1.1 we should conform to PEP 386
 """
 
-
-__version__ = (1, 8, 3, "final", 0)
+__version__ = (1, 9, 0, "dev", 0)
 
 
 import inspect
@@ -38,10 +36,13 @@ import sys
 
 class Version(tuple):
     """
-    Version class suitable to be used in module's __version__
+    Smart version class.
+    
+    Version class is a tuple of five elements and has the same logical
+    components as :data:`sys.version_info`.
 
-    Version class is a tuple and has the same logical components as
-    :data:`sys.version_info`.
+    In addition to the tuple elements there is a special :attr:`vcs` attribute
+    that has all of the data exported by the version control system.
     """
 
     _RELEASELEVEL_TO_TOKEN = {
@@ -155,7 +156,7 @@ class Version(tuple):
         Accessing this attribute for the first time will query VCS lookup (may
         be slower, will trigger imports of various VCS plugins).
 
-        The returned object, if not None, should have at least `revno`
+        The returned object, if not None, should have at least the `revno`
         property. For details see your particular version control integration
         plugin.
 
@@ -201,6 +202,50 @@ class Version(tuple):
                 self._source_tree = os.path.dirname(os.path.abspath(path))
         return self
 
+    @classmethod
+    def from_expression(cls, pkg_expression):
+        """
+        Create a version from a python module name.
+
+        The argument must describe a module to import. The module must declare
+        a variable that holds the actual version. The version cannot be a plain
+        string and instead must be a tuple of five elements as described by the
+        :class:`~versiontools.Version` class.
+        
+        The variable that holds the version should be called ``__version__``.
+        If it is called something else the actual name has to be specified
+        explicitly in ``pkg_expression`` by appending a colon (``:``) and the
+        name of the variable (for example ``package:version``).
+
+        .. versionadded:: 1.9
+        """
+        # Parse the version string
+        if ":" in pkg_expression:
+            module_or_package, identifier = pkg_expression.split(":", 1)
+        else:
+            # Allow people not to include the identifier separator
+            module_or_package = pkg_expression
+            identifier = "" 
+        # Use __version__ unless specified otherwise
+        if identifier == "":
+            identifier = "__version__"
+        # Import module / package
+        try:
+            obj = __import__(module_or_package, globals(), locals(), [''])
+        except ImportError:
+            message = _get_exception_message(*sys.exc_info())
+            raise ValueError(
+                "Unable to import %r%s" % (module_or_package, message))
+        # Look up the version identifier.
+        try:
+            version = getattr(obj, identifier)
+        except AttributeError:
+            message = _get_exception_message(*sys.exc_info())
+            raise ValueError(
+                "Unable to access %r in %r%s" % (
+                    identifier, module_or_package, message))
+        return cls.from_tuple_and_hint(version, hint=obj)
+
     def __str__(self):
         """
         Return a string representation of the version tuple.
@@ -244,17 +289,11 @@ class Version(tuple):
         +===========+================================================+
         | Bazaar    | Revision number (revno),  e.g. ``54``          |
         +-----------+------------------------------------------------+
-        | Git       | Head commit ID (sha1), e.g.                    |
-        |           | ``"e40105c58a162de822b63d28b63f768a9763fbe3"`` |
+        | Git       | Short commit ID of the current branch          |
+        |           | e.g. ``"763fbe3"``                             |
         +-----------+------------------------------------------------+
         | Mercurial | Tip revision number, e.g. ``54``               |
         +-----------+------------------------------------------------+
-
-        .. note::
-            This logic is implemented in :meth:`versiontools.Version.__str__()`
-            and can be overridden by sub-classes. You can use project-specific
-            logic if required. To do that replace __version__ with an instance
-            of your sub-class.
         """
         version = "%s.%s" % (self.major, self.minor)
         if self.micro != 0:
@@ -323,6 +362,11 @@ def format_version(version, hint=None):
     """
     Pretty formatting for 5-element version tuple.
 
+    Instead of using :class:`~versiontools.Version` class directly you may want
+    to use this simplified interface where you simply interpret an arbitrary
+    five-element version tuple as a version to get the pretty and
+    :pep:`386`-compliant version string.
+
     :param version:
         The version to format
 
@@ -335,11 +379,10 @@ def format_version(version, hint=None):
         The hint object, if provided, helps versiontools to locate the
         directory which might host the project's source code. The idea is to
         pass `module.__version__` as the first argument and `module` as the
-        hint. This way we can loookup where module came from, and look for
-        version control system data in that directory. Technicallally passing
-        hint will make us call
-        :meth:`~versiontools.Version.from_tuple_and_hint()` instead of
-        :meth:`~versiontools.Version.from_tuple()`.
+        hint. This way we can lookup where module came from, and look for
+        version control system data in that directory. Technically passing hint
+        will make us call :meth:`~versiontools.Version.from_tuple_and_hint()`
+        instead of :meth:`~versiontools.Version.from_tuple()`.
 
     :type hint:
         either :obj:`None`, or a module.
@@ -356,63 +399,10 @@ def format_version(version, hint=None):
         raise ValueError("version must be a tuple of five items")
 
 
-if sys.version_info[:1] < (3,):
-    isstring = lambda string: isinstance(string, basestring)
-else:
-    isstring = lambda string: isinstance(string, str)
-
-
-def handle_version(dist, attr, value):
+def _get_exception_message(exception, value, traceback):
     """
-    Handle version keyword as used by setuptools.
-
-    .. note::
-        This function is normally called by setuptools, it is advertised in the
-        entry points of versiontools as setuptools extension. There is no need
-        to call in manually.
-
-    .. versionadded:: 1.3
+    Helper for compatibility with older python versions
     """
-    from distutils.errors import DistutilsSetupError
-    # We need to look at dist.metadata.version to actually see the version
-    # that was passed to setup. Something in between does not seem to like our
-    # version string and we get 0 here, odd.
-    if value == 0:
-        value = dist.metadata.version
-    if not (isstring(value)
-            and value.startswith(":versiontools:")):
-        return
-    # Peel away the magic tag
-    value = value[len(":versiontools:"):]
-    # Check if the syntax of the version is okay
-    if ":" not in value:
-        raise DistutilsSetupError(
-            "version must be of the form `module_or_package:identifier`")
-    # Parse the version string
-    module_or_package, identifier = value.split(":", 1)
-    # Use __version__ unless specified otherwise
-    if identifier == "":
-        identifier = "__version__"
-    # Import the module or package indicated by the version tag
-    try:
-        obj = __import__(module_or_package, globals(), locals(), [''])
-    except ImportError:
-        message = get_exception_message(*sys.exc_info())
-        raise DistutilsSetupError(
-            "Unable to import %r%s" % (module_or_package, message))
-    # Look up the version identifier.
-    try:
-        version = getattr(obj, identifier)
-    except AttributeError:
-        message = get_exception_message(*sys.exc_info())
-        raise DistutilsSetupError(
-            "Unable to access %r in %r%s" %
-            (identifier, module_or_package, message))
-    # Yay we have it! Let's format it correctly and overwrite the old value
-    dist.metadata.version = format_version(version, obj)
-
-
-def get_exception_message(exception, value, traceback):
     if value is not None:  # the exception value
         return ": %s" % value
     return ""

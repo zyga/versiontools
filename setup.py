@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2010 Linaro Limited
+# Copyright (C) 2010-2012 Linaro Limited
 #
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
@@ -18,15 +18,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
+
+import versiontools.versiontools_support
+
 from setuptools import setup, find_packages
-
-
-import versiontools
 
 
 setup(
     name='versiontools',
-    version=versiontools.format_version(versiontools.__version__),
+    version=':versiontools:versiontools',
     author="Zygmunt Krynicki",
     author_email="zygmunt.krynicki@linaro.org",
     packages=find_packages(),
@@ -39,7 +39,7 @@ setup(
     git=versiontools.git_support:GitIntegration
     hg=versiontools.hg_support:HgIntegration
     [distutils.setup_keywords]
-    version=versiontools:handle_version
+    version=versiontools.setuptools_hooks:version
     """,
     classifiers=[
         "Development Status :: 5 - Production/Stable",

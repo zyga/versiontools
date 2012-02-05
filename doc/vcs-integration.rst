@@ -1,22 +1,44 @@
-Integration with version control systems
-****************************************
+Integration with version control
+********************************
 
-About
-=====
-
-Version tools supports a form of version control system integration. This code
+versiontools supports a form of version control system integration. This code
 is *only* triggered for development versions of your project (indicated by
-setting ``releaselevel`` to something other than ``"final"``)
+setting ``releaselevel`` to ``dev"``)
 
-.. note::
-    Currently to use :abbr:`VCS (Version Control System)` integration you
-    *must* use the name __version__ in your variable name and you *must* define
-    it at module level.  There is some fuzzy logic that walks the traceback
-    looking for ``__version__``.
+In development mode the generated version string will include the revision
+number or the abbreviated hash of the current commit. This makes it nice for
+ongoing releases on pypi as after each commit your source tarballs will be
+different.
 
+Batteries included
+==================
 
-Integration plug-ins
-====================
+The following version control systems are supported out of the box.  To use
+them you need to have the corresponding libraries installed. Check the links
+below for details.
+
+.. note:
+    Users of your packages will *not* need those libraries. They are most
+    useful for the developer during project life-cycle, especially between
+    releases, to identify tarballs easily.
+
+Bazaar
+++++++
+
+Using bazaar appends the branch revision to the version string. See :ref:`bzr` 
+
+Git
++++
+
+Using git appends the short commit id of the active branch. See :ref:`git` 
+
+Mercurial
++++++++++
+
+Mercurial plug-in appends the branch revision to the development version. See :ref:`hg`
+
+Custom version control systems
+==============================
 
 VCS integration is not hard-coded into versiontools. Instead any package that
 uses setuptools and provides an entry point ``versiontools.vcs_integration``
@@ -44,42 +66,3 @@ This will make versiontools look for the ``foo`` system by importing
 ``foo.versiontools_plugin`` and extracting the ``FooIntegration`` class.
 Remember that your ``foo`` package needs to be installed for this system to
 work.
-
-
-Batteries included
-==================
-
-Versiontools comes with a few plug-ins for commonly used version control
-systems.  To use them you need to have the corresponding libraries installed.
-They are documented below. 
-
-.. note:
-    Users of your packages will *not* need those libraries. They are most
-    useful for the developer during project life-cycle, especially between
-    releases, to identify tarballs easily.
-
-Bazaar
-++++++
-
-To work with Bazaar repositories you will need bzrlib. You can install it with
-pip or from the ubuntu package.
-
-.. note:: 
-    On Windows the typical Bazaar installation bundles both the python
-    interpreter and a host of libraries and those libraries are not accessible
-    by the typically-installed python interpreter. If you wish to use Bazaar on
-    windows we would recommend to install Bazaar directly from pypi.
-
-Git
-+++
-
-To work with Git repositories you will need `GitPython
-<http://pypi.python.org/pypi/GitPython>`_. Version 0.1.6 is sufficient to run
-the code. 
-
-Mercurial
-+++++++++
-
-To work with Mercurial repositories you will need `Mercurial
-<http://mercurial.selenic.com/>`_. You can install it with pip or from the
-ubuntu package. 

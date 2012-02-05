@@ -1,9 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-"
-#
 # Copyright (C) 2011 enn.io UG (haftungsbeschränkt)
+# Copyright (C) 2011-2012 Linaro Limited
 #
 # Author: Jannis Leidel <jannis@leidel.info>
+# Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
 # This file is part of versiontools.
 #
@@ -20,7 +20,18 @@
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-hg support for versiontools
+.. _hg:
+
+versiontools.hg_support
+=======================
+
+Mercurial (Hg) support for versiontools.
+
+.. note::
+
+    To work with Mercurial repositories you will need `Mercurial
+    <http://mercurial.selenic.com/>`_. You can install it with pip or from the
+    `mercurial` package on Ubuntu. 
 """
 import logging
 import sys
@@ -67,8 +78,8 @@ class HgIntegration(object):
             from mercurial.ui import ui
             repo = repository(ui(), source_tree)
         except Exception:
-            from versiontools import get_exception_message
-            message = get_exception_message(*sys.exc_info())
+            from versiontools import _get_exception_message
+            message = _get_exception_message(*sys.exc_info())
             logging.debug("Unable to get branch revision because "
                           "directory %r is not a hg repo. Error: %s",
                           (source_tree, message))

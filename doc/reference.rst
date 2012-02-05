@@ -3,63 +3,26 @@
 Code reference
 **************
 
-Version class
-^^^^^^^^^^^^^
+.. automodule:: versiontools
 
 .. autoclass:: versiontools.Version
     :members:
         __new__, major, minor, micro, releaselevel, serial, from_tuple,
-        from_tuple_and_hint, vcs,  __str__
-
-
-Utility functions
-^^^^^^^^^^^^^^^^^
-
-Instead of using :class:`~versiontools.Version` class directly you may want to
-use the simplified interface where you simply interpret an arbitrary
-five-element version tuple as a version to get the pretty and
-:pep:`386`-compliant version string. In that case you may be interested in
-this function:
+        from_tuple_and_hint, from_expression, vcs,  __str__
 
 .. autofunction:: versiontools.format_version
 
+.. automodule:: versiontools.setuptools_hooks
+    :members:
 
-Integration with setuptools 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. automodule:: versiontools.versiontools_support
+    :members:
 
-Setuptools has a framework where external packages, such as versiontools, can
-hook into setup.py metadata and commands. We use this feature to intercept
-special values of the `version` keyword argument to `setup()`. This argument
-handled by the following method:
+.. automodule:: versiontools.bzr_support
+    :members:
 
-.. autofunction:: versiontools.handle_version
+.. automodule:: versiontools.git_support
+    :members:
 
-
-Integration with version control systems
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following version control integration plugins are bundled with
-versiontools. Additional plugins may be provided by third party modules but
-they are not documented here.
-
-
-Bazaar
-++++++
-
-.. autoclass:: versiontools.bzr_support.BzrIntegration
-    :members: from_source_tree, revno, branch_nick
-
-
-Git
-+++
-
-.. autoclass:: versiontools.git_support.GitIntegration
-    :members: from_source_tree, revno, branch_nick
-
-
-Hg (Mercurial)
-++++++++++++++
-
-.. autoclass:: versiontools.hg_support.HgIntegration
-    :members: from_source_tree, revno, branch_nick
-
+.. automodule:: versiontools.hg_support
+    :members:

@@ -1,9 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-"
-#
 # Copyright (C) 2011 enn.io UG (haftungsbeschränkt)
+# Copyright (C) 2011-2012 Linaro Limited
 #
 # Author: Jannis Leidel <jannis@leidel.info>
+# Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
 # This file is part of versiontools.
 #
@@ -20,8 +20,20 @@
 # along with versiontools.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-git support for versiontools
+.. _git:
+
+versiontools.git_support
+========================
+
+Git support for versiontools
+
+.. note::
+
+    To work with Git repositories you will need `GitPython
+    <http://pypi.python.org/pypi/GitPython>`_. Version 0.1.6 is sufficient to
+    run the code. You can install it with pip. 
 """
+
 import logging
 import sys
 
@@ -52,7 +64,8 @@ class GitIntegration(object):
     @property
     def revno(self):
         """
-        Revision number of the branch
+        Same as
+        :attr:`~versiontools.git_support.GitIntegration.commit_id_abbrev`
         """
         return self.commit_id_abbrev
 
@@ -91,8 +104,8 @@ class GitIntegration(object):
             from git import Repo
             repo = Repo(source_tree)
         except Exception:
-            from versiontools import get_exception_message
-            message = get_exception_message(*sys.exc_info())
+            from versiontools import _get_exception_message
+            message = _get_exception_message(*sys.exc_info())
             logging.debug("Unable to get branch revision because "
                           "directory %r is not a git repo. Error: %s",
                           (source_tree, message))
