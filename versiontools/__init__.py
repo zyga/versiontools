@@ -406,3 +406,6 @@ def _get_exception_message(exception, value, traceback):
     if value is not None:  # the exception value
         return ": %s" % value
     return ""
+
+
+from versiontools.setuptools_hooks import version as handle_version
