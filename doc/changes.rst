@@ -1,10 +1,17 @@
 Release history
 ***************
 
-.. _unreleased_version:
+.. _version_1_9_1:
 
-Unreleased version
-==================
+Version 1.9.1
+=============
+
+* Just bump version to final, sorry
+
+.. _version_1_9:
+
+Version 1.9
+===========
 
 * Reorganize and update documentation.
 * Add a new way of using versiontools that does not require using
