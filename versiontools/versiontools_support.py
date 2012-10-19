@@ -75,7 +75,7 @@ class VersiontoolsEnchancedDistributionMetadata(distutils.dist.DistributionMetad
     # was created before the introduction of new-style classes to python.
     __base = distutils.dist.DistributionMetadata
 
-    def get_version(self): 
+    def get_version(self):
         """
         Get distribution version.
 

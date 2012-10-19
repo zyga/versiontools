@@ -29,7 +29,7 @@ Bazaar support for versiontools
     To work with Bazaar repositories you will need bzrlib.  You can install it
     with pip or from the ``bzr`` package on Ubuntu.
 
-.. warning:: 
+.. warning::
 
     On Windows the typical Bazaar installation bundles both the python
     interpreter and a host of libraries and those libraries are not accessible

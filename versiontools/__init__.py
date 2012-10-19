@@ -319,7 +319,7 @@ class Version(VersionBase):
         a variable that holds the actual version. The version cannot be a plain
         string and instead must be a tuple of five elements as described by the
         :class:`~versiontools.Version` class.
-        
+
         The variable that holds the version should be called ``__version__``.
         If it is called something else the actual name has to be specified
         explicitly in ``pkg_expression`` by appending a colon (``:``) and the
@@ -333,7 +333,7 @@ class Version(VersionBase):
         else:
             # Allow people not to include the identifier separator
             module_or_package = pkg_expression
-            identifier = "" 
+            identifier = ""
         # Use __version__ unless specified otherwise
         if identifier == "":
             identifier = "__version__"

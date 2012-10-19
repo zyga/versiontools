@@ -31,7 +31,7 @@ Mercurial (Hg) support for versiontools.
 
     To work with Mercurial repositories you will need `Mercurial
     <http://mercurial.selenic.com/>`_. You can install it with pip or from the
-    `mercurial` package on Ubuntu. 
+    `mercurial` package on Ubuntu.
 """
 import logging
 import sys

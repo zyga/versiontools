@@ -23,7 +23,7 @@ from distutils.errors import DistutilsSetupError
 from unittest import TestCase
 
 from versiontools import Version
-from versiontools.setuptools_hooks import version as handle_version 
+from versiontools.setuptools_hooks import version as handle_version
 
 
 class VersionFormattingTests(TestCase):

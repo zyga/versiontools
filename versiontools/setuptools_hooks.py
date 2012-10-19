@@ -63,7 +63,7 @@ def version(dist, attr, value):
         # Lookup the version object
         version = Version.from_expression(value)
         # Update distribution metadata
-        dist.metadata.version = str(version) 
+        dist.metadata.version = str(version)
     except ValueError:
         message = _get_exception_message(*sys.exc_info())
         if message.startswith(": "):
