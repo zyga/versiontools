@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-"
 # Copyright (C) 2011 enn.io UG (haftungsbeschränkt)
 # Copyright (C) 2011-2012 Linaro Limited
+# Copyright (C) 2012 Canonical
+# Copyright (C) 2014 Canonical
 #
 # Author: Jannis Leidel <jannis@leidel.info>
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>

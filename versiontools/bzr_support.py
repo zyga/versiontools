@@ -1,4 +1,4 @@
-# Copyright (C) 2010 -2012 Linaro Limited
+# Copyright (C) 2010-2012 Linaro Limited
 #
 # Author: Zygmunt Krynicki <zygmunt.krynicki@linaro.org>
 #
