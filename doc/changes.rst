@@ -6,6 +6,10 @@ Release history
 Version 1.10
 ============
 
+* Split off :class:`versiontools.VersionBase` from
+  :class:`versiontools.Version` so that it can be used outside of the VCS
+  context.
+
 .. _version_1_9_1:
 
 Version 1.9.1

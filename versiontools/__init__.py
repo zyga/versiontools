@@ -34,15 +34,15 @@ import os
 import sys
 
 
-class Version(tuple):
+class VersionBase(tuple):
     """
-    Smart version class.
-    
-    Version class is a tuple of five elements and has the same logical
-    components as :data:`sys.version_info`.
+    Base class for Version class.
 
-    In addition to the tuple elements there is a special :attr:`vcs` attribute
-    that has all of the data exported by the version control system.
+    Keep the core logic without any VCS awareness or support. The VersionBase
+    class is a tuple of five elements and has the same logical components as
+    :data:`sys.version_info`.
+
+    .. versionadded:: 1.10
     """
 
     _RELEASELEVEL_TO_TOKEN = {
@@ -59,7 +59,7 @@ class Version(tuple):
         variables except for releaselevel are silently converted to integers
         That is::
 
-            >>> Version("1.2.3.dev".split("."))
+            >>> VersionBase("1.2.3.dev".split("."))
             (1, 2, 3, "dev", 0)
 
         :param major:
@@ -124,8 +124,6 @@ class Version(tuple):
                 ("serial must be greater than zero for"
                  " %s releases") % releaselevel)
         obj = tuple.__new__(cls, (major, minor, micro, releaselevel, serial))
-        object.__setattr__(obj, '_source_tree', cls._find_source_tree())
-        object.__setattr__(obj, '_vcs', None)
         return obj
 
     major = property(
@@ -147,6 +145,116 @@ class Version(tuple):
     serial = property(
         operator.itemgetter(4),
         doc="Serial number")
+
+    def __str__(self):
+        """
+        Return a string representation of the version tuple.
+
+        The string is not a direct concatenation of all version components.
+        Instead it's a more natural 'human friendly' version where components
+        with certain values are left out.
+
+        The following table shows how a version tuple gets converted to a
+        version string.
+
+        +-------------------------------+-------------------+
+        | __version__                   | Formatter version |
+        +===============================+===================+
+        | ``(1, 2, 0, "final", 0)``     | ``"1.2"``         |
+        +-------------------------------+-------------------+
+        | ``(1, 2, 3, "final", 0)``     | ``"1.2.3"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "alpha", 1)``     | ``"1.3a1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "beta", 1)``      | ``"1.3b1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "candidate", 1)`` | ``"1.3c1"``       |
+        +-------------------------------+-------------------+
+        | ``(1, 3, 0, "dev", 0)``       | ``"1.3.dev"``     |
+        +-------------------------------+-------------------+
+        """
+        version = "%s.%s" % (self.major, self.minor)
+        if self.micro != 0:
+            version += ".%s" % self.micro
+        token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
+        if token:
+            version += "%s%d" % (token, self.serial)
+        if self.releaselevel == "dev":
+            version += ".dev"
+        return version
+
+
+class Version(VersionBase):
+    """
+    Smart version class.
+
+    Version class is a tuple of five elements and has the same logical
+    components as :data:`sys.version_info`.
+
+    In addition to the tuple elements there is a special :attr:`vcs` attribute
+    that has all of the data exported by the version control system.
+    """
+
+    def __new__(cls, major, minor, micro=0, releaselevel="final", serial=0):
+        """
+        Construct a new version tuple.
+
+        There is some extra logic when initializing tuple elements. All
+        variables except for releaselevel are silently converted to integers
+        That is::
+
+            >>> Version("1.2.3.dev".split("."))
+            (1, 2, 3, "dev", 0)
+
+        :param major:
+            Major version number
+
+        :type major:
+            :class:`int` or :class:`str`
+
+        :param minor:
+            Minor version number
+
+        :type minor:
+            :class:`int` or :class:`str`
+
+        :param micro:
+            Micro version number, defaults to ``0``.
+
+        :type micro:
+            :class:`int` or :class:`str`
+
+        :param releaselevel:
+            Release level name.
+
+            There is a constraint on allowed values of releaselevel. Only the
+            following values are permitted:
+
+            * 'dev'
+            * 'alpha'
+            * 'beta'
+            * 'candidate'
+            * 'final'
+
+        :type releaselevel:
+            :class:`str`
+
+        :param serial:
+            Serial number, usually zero, only used for alpha, beta and
+            candidate versions where it must be greater than zero.
+
+        :type micro:
+            :class:`int` or :class:`str`
+
+        :raises ValueError:
+            If releaselevel is incorrect, a version component is negative or
+            serial is 0 and releaselevel is alpha, beta or candidate.
+        """
+        obj = super(Version, cls).__new__(
+            cls, major, minor, micro, releaselevel, serial)
+        object.__setattr__(obj, '_source_tree', cls._find_source_tree())
+        object.__setattr__(obj, '_vcs', None)
+        return obj
 
     @property
     def vcs(self):
@@ -295,17 +403,9 @@ class Version(tuple):
         | Mercurial | Tip revision number, e.g. ``54``               |
         +-----------+------------------------------------------------+
         """
-        version = "%s.%s" % (self.major, self.minor)
-        if self.micro != 0:
-            version += ".%s" % self.micro
-        token = self._RELEASELEVEL_TO_TOKEN.get(self.releaselevel)
-        if token:
-            version += "%s%d" % (token, self.serial)
-        if self.releaselevel == "dev":
-            if self.vcs is not None:
-                version += ".dev%s" % self.vcs.revno
-            else:
-                version += ".dev"
+        version = super(Version, self).__str__()
+        if self.releaselevel == "dev" and self.vcs is not None:
+            version += str(self.vcs.revno)
         return version
 
     @classmethod
