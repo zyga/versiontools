@@ -36,6 +36,7 @@ setup(
     entry_points="""
     [versiontools.vcs_integration]
     bzr=versiontools.bzr_support:BzrIntegration
+    bzr_sh=versiontools.bzr_support:BzrShellIntegration
     git=versiontools.git_support:GitIntegration
     git_sh=versiontools.git_support:GitShellIntegration
     hg=versiontools.hg_support:HgIntegration

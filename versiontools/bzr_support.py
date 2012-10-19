@@ -95,3 +95,51 @@ class BzrIntegration(object):
                           (source_tree, message))
         if branch:
             return cls(branch)
+
+
+class BzrShellIntegration(object):
+    """
+    Bazaar (shell version) integration for versiontools
+
+    .. versionadded:: 1.10
+    """
+    def __init__(self, revno, branch_nick):
+        self._revno = revno
+        self._branch_nick = branch_nick
+
+    @property
+    def revno(self):
+        """
+        Revision number of the branch
+        """
+        return self._revno
+
+    @property
+    def branch_nick(self):
+        """
+        Nickname of the branch
+        """
+        return self._branch_nick
+
+    @classmethod
+    def from_source_tree(cls, source_tree):
+        """
+        Initialize :class:`~versiontools.bzr_support.BzrShellIntegration` by
+        pointing at the source tree.  Any file or directory inside the
+        source tree may be used.
+        """
+        import subprocess
+        try:
+            renvo = subprocess.check_output([
+                'bzr', 'revno'], universal_newlines=True,
+                stderr=subprocess.PIPE)
+            revno = revno.strip()
+        except subprocess.CalledProcessError:
+            return
+        try:
+            branch_nick = subprocess.check_output([
+                'bzr', 'nick'], universal_newlines=True)
+            branch_nick = branch_nick.strip()
+        except subprocess.CalledProcessError:
+            branch_nick = None
+        return cls(revno, branch_nick)

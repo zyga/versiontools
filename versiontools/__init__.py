@@ -26,6 +26,7 @@ Define *single* and *useful* ``__version__`` of a project.
 """
 
 __version__ = (1, 10, 0, "dev", 0)
+__all__ = ["VersionBase", "Version", "format_version", "handle_version"]
 
 
 import inspect
