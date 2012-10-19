@@ -1,6 +1,11 @@
 Release history
 ***************
 
+.. _version_1_10:
+
+Version 1.10
+============
+
 .. _version_1_9_1:
 
 Version 1.9.1

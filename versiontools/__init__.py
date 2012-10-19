@@ -25,7 +25,7 @@ Define *single* and *useful* ``__version__`` of a project.
 .. note: Since version 1.1 we should conform to PEP 386
 """
 
-__version__ = (1, 9, 1, "final", 0)
+__version__ = (1, 10, 0, "dev", 0)
 
 
 import inspect
