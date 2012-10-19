@@ -9,6 +9,9 @@ Version 1.10
 * Split off :class:`versiontools.VersionBase` from
   :class:`versiontools.Version` so that it can be used outside of the VCS
   context.
+* Add :class:`versiontools.git_support.GitShellIntegration` that does not
+  depend on python git classes and instead parses git output. It is therefore
+  more likely to just work out of the box on otherwise empty virtualenv.
 
 .. _version_1_9_1:
 

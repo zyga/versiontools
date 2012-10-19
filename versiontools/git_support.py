@@ -31,7 +31,8 @@ Git support for versiontools
 
     To work with Git repositories you will need `GitPython
     <http://pypi.python.org/pypi/GitPython>`_. Version 0.1.6 is sufficient to
-    run the code. You can install it with pip. 
+    run the code. You can install it with pip. Alternatively, if you have
+    git(1) in your PATH you don't need any additional python modules.
 """
 
 import logging
@@ -111,3 +112,75 @@ class GitIntegration(object):
                           (source_tree, message))
         if repo:
             return cls(repo)
+
+
+class GitShellIntegration(object):
+    """
+    Git (shell version) integration for versiontools
+    """
+    def __init__(self, commit_id, branch_nick=None):
+        self._commit_id = commit_id 
+        self._branch_nick = branch_nick 
+
+    @property
+    def revno(self):
+        """
+        Same as
+        :attr:`~versiontools.git_support.GitShellIntegration.commit_id_abbrev`
+        """
+        return self.commit_id_abbrev
+
+    @property
+    def commit_id(self):
+        """
+        The full commit id
+        """
+        return self._commit_id
+
+    @property
+    def commit_id_abbrev(self):
+        """
+        The abbreviated, 7 character commit id
+        """
+        return self._commit_id[:7]
+
+    @property
+    def branch_nick(self):
+        """
+        Nickname of the branch
+
+        .. versionadded:: 1.0.4
+        """
+        return self._branch_nick
+
+    @classmethod
+    def from_source_tree(cls, source_tree):
+        """
+        Initialize :class:`~versiontools.git_support.GitShellIntegration` by
+        pointing at the source tree.  Any file or directory inside the
+        source tree may be used.
+        """
+        import subprocess
+        try:
+            commit_id = subprocess.check_output(
+                ['git', 'show', '-s', '--format=%H', 'HEAD'],
+                cwd=source_tree,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+            commit_id = commit_id.strip()
+        except subprocess.CalledProcessError:
+            return
+        try:
+            branch_name = subprocess.check_output(
+                ['git', 'symbolic-ref', '--quiet', 'HEAD'],
+                cwd=source_tree,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+            branch_name = branch_name.strip()
+            if branch_name.startswith("refs/heads/"):
+                branch_name = branch_name[len("refs/heads"):]
+        except (OSError, subprocess.CalledProcessError):
+            branch_name = None
+        return cls(commit_id, branch_name)
