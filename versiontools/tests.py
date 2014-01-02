@@ -134,8 +134,14 @@ class HandleVersionTests(TestCase):
         except Exception:
             e = sys.exc_info()[1]
             self.assertTrue(isinstance(e, DistutilsSetupError))
-            self.assertEqual(str(e), "Unable to import 'nonexisting': "
-                                      "No module named nonexisting")
+            if sys.version_info[0:2] >= (3, 3):
+                self.assertEqual(str(e), (
+                    "Unable to import 'nonexisting': "
+                    "No module named 'nonexisting'"))
+            else:
+                self.assertEqual(str(e), (
+                    "Unable to import 'nonexisting': "
+                    "No module named nonexisting"))
 
     def test_not_found(self):
         version = ':versiontools:versiontools:__nonexisting__'
