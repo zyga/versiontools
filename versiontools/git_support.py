@@ -56,8 +56,8 @@ class GitIntegration(object):
             pass
         try:
             # This is for python-git 0.1.6 (that is in debian and ubuntu)
-            head = [head for head in repo.heads
-                    if head.name == repo.active_branch][0]
+            head = [a_head for a_head in repo.heads
+                    if a_head.name == repo.active_branch][0]
             self._branch_nick = head.name
             self._commit_id = head.commit.id
         except (IndexError, KeyError):
