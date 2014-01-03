@@ -61,7 +61,8 @@ import distutils.dist
 import distutils.errors
 
 
-class VersiontoolsEnchancedDistributionMetadata(distutils.dist.DistributionMetadata):
+class VersiontoolsEnchancedDistributionMetadata(
+        distutils.dist.DistributionMetadata):
     """
     A subclass of distutils.dist.DistributionMetadata that uses versiontools
 
@@ -92,7 +93,7 @@ class VersiontoolsEnchancedDistributionMetadata(distutils.dist.DistributionMetad
         ``setup_requires`` feature of ``setuptools``.
         """
         if (self.name is not None and self.version is not None
-            and self.version.startswith(":versiontools:")):
+                and self.version.startswith(":versiontools:")):
             return (self.__get_live_version() or self.__get_frozen_version()
                     or self.__fail_to_get_any_version())
         else:
@@ -141,5 +142,6 @@ the documentation for a full list of required modules.""")
 # prevent a (odd) case of multiple imports of this module.
 if not issubclass(
     distutils.dist.DistributionMetadata,
-    VersiontoolsEnchancedDistributionMetadata):
-    distutils.dist.DistributionMetadata = VersiontoolsEnchancedDistributionMetadata
+        VersiontoolsEnchancedDistributionMetadata):
+    distutils.dist.DistributionMetadata = (
+        VersiontoolsEnchancedDistributionMetadata)

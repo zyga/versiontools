@@ -144,6 +144,7 @@ class HandleVersionTests(TestCase):
         except Exception:
             e = sys.exc_info()[1]
             self.assertTrue(isinstance(e, DistutilsSetupError))
-            self.assertEqual(str(e), "Unable to access '__nonexisting__' in "
-                                      "'versiontools': 'module' object has "
-                                      "no attribute '__nonexisting__'")
+            self.assertEqual(str(e), (
+                "Unable to access '__nonexisting__' in "
+                "'versiontools': 'module' object has "
+                "no attribute '__nonexisting__'"))

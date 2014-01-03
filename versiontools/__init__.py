@@ -421,8 +421,8 @@ class Version(VersionBase):
             frame, filename, lineno, func_name, context, context_index = record
             if context is None or context_index >= len(context):
                 continue
-            if (func_name == "<module>" and "__version__" in
-                context[context_index]):
+            if (func_name == "<module>"
+                    and "__version__" in context[context_index]):
                 caller = frame
                 break
         else:
@@ -448,7 +448,7 @@ class Version(VersionBase):
         if self._source_tree is None:
             return
         for entrypoint in pkg_resources.iter_entry_points(
-            "versiontools.vcs_integration"):
+                "versiontools.vcs_integration"):
             try:
                 integration_cls = entrypoint.load()
                 integration = integration_cls.from_source_tree(
