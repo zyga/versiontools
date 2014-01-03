@@ -137,7 +137,7 @@ class BzrShellIntegration(object):
                 universal_newlines=True,
             )
             revno = revno.strip()
-        except subprocess.CalledProcessError:
+        except (OSError, subprocess.CalledProcessError):
             return
         try:
             branch_nick = subprocess.check_output(
@@ -147,6 +147,6 @@ class BzrShellIntegration(object):
                 universal_newlines=True,
             )
             branch_nick = branch_nick.strip()
-        except subprocess.CalledProcessError:
+        except (OSError, subprocess.CalledProcessError):
             branch_nick = None
         return cls(revno, branch_nick)

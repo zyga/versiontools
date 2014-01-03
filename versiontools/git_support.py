@@ -172,7 +172,7 @@ class GitShellIntegration(object):
                 universal_newlines=True,
             )
             commit_id = commit_id.strip()
-        except subprocess.CalledProcessError:
+        except (OSError, subprocess.CalledProcessError):
             return
         try:
             branch_name = subprocess.check_output(
