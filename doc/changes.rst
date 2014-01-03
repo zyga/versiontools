@@ -6,12 +6,31 @@ Release history
 Version 1.10
 ============
 
+* Add support for python3.2, python3.3 and python3.4. This represents the
+  current Ubuntu LTS release (12.04), current Debian testing release and
+  upcoming Ubuntu LTS release (14.04). This is where the development happens now
+  so support for 3.x is now first-class and should be promptly fixed, if any
+  bugs are discovered.
+* Drop support for python2.4, python2.5, python3.0 and python3.1. Those
+  versions are either very old and not actively used anymore, except for legacy
+  systems or represent the early, virtually unused python3 versions. Support
+  for python2.7 will be retained indefinitely. The status of 2.6 is uncertain
+  as it's not used by any systems I'm interested in anymore and I cannot test
+  it easily.
 * Split off :class:`versiontools.VersionBase` from
   :class:`versiontools.Version` so that it can be used outside of the VCS
-  context.
+  context. This allows for derivative versions classes to easily reuse the
+  common parts. The normal Version class is now just focused on discovering
+  version control system.
 * Add :class:`versiontools.git_support.GitShellIntegration` that does not
   depend on python git classes and instead parses git output. It is therefore
-  more likely to just work out of the box on otherwise empty virtualenv.
+  more likely to just work out of the box on otherwise empty virtualenv. It
+  also provides good support for python3.x without being bound to python-git.
+* Add :class:`versiontools.bzr_support.BzrShellIntegration` that does not
+  depend on python2.x bzr classes and instead parses bzr output. It is
+  therefore more likely to just work out of the box on otherwise empty
+  virtualenv. It also provides good support for python3.x without being bound
+  to bzrlib that is likely going to stay on python2.7 forever.
 
 .. _version_1_9_1:
 
