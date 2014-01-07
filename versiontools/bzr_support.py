@@ -130,15 +130,22 @@ class BzrShellIntegration(object):
         """
         import subprocess
         try:
-            renvo = subprocess.check_output([
-                'bzr', 'revno'], universal_newlines=True,
-                stderr=subprocess.PIPE)
+            revno = subprocess.check_output(
+                ['bzr', 'revno'],
+                cwd=source_tree,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
             revno = revno.strip()
         except subprocess.CalledProcessError:
             return
         try:
-            branch_nick = subprocess.check_output([
-                'bzr', 'nick'], universal_newlines=True)
+            branch_nick = subprocess.check_output(
+                ['bzr', 'nick'],
+                cwd=source_tree,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
             branch_nick = branch_nick.strip()
         except subprocess.CalledProcessError:
             branch_nick = None
